@@ -78,3 +78,76 @@ To customize for your own use:
 - **Location**: Albuquerque, NM, USA
 - **GitHub**: [Dbourassa11](https://github.com/Dbourassa11)
 - **LinkedIn**: [charlesdbourassa](https://www.linkedin.com/in/charlesdbourassa)
+
+---
+
+## Testing
+
+This project includes a comprehensive test suite with 230+ test cases covering all aspects of the interactive resume.
+
+### Test Coverage
+
+The test suite includes:
+
+1. **Unit Tests for JavaScript** (`tests/script.test.js`)
+   - 60+ test cases for all interactive features
+   - Smooth scrolling and navigation
+   - Form validation and submission
+   - Intersection Observer for animations
+   - Keyboard navigation
+   - Edge cases and error handling
+
+2. **HTML Validation Tests** (`tests/html.validation.test.js`)
+   - 80+ test cases for HTML structure
+   - SEO meta tags validation
+   - Accessibility features verification
+   - Semantic HTML structure
+   - Social media integration
+
+3. **CSS Validation Tests** (`tests/css.validation.test.js`)
+   - 90+ test cases for styling
+   - Responsive design verification
+   - Accessibility features (focus states, skip links)
+   - Animation and transition validation
+   - Print styles verification
+
+### Running Tests
+
+Install dependencies:
+```bash
+npm install
+```
+
+Run all tests:
+```bash
+npm test
+```
+
+Run tests with coverage report:
+```bash
+npm run test:coverage
+```
+
+Run specific test suites:
+```bash
+npm run test:script    # JavaScript functionality tests
+npm run test:html      # HTML structure tests
+npm run test:css       # CSS styling tests
+```
+
+### Test Technologies
+
+- **Jest** - Testing framework
+- **jsdom** - DOM simulation for browser environment
+- **@testing-library/jest-dom** - Custom matchers for DOM testing
+
+### Coverage Goals
+
+All tests target 80%+ coverage across:
+- Functions
+- Lines
+- Branches
+- Statements
+
+For detailed testing documentation, see [tests/README.md](tests/README.md).
+
