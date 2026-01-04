@@ -71,7 +71,7 @@ To view the website locally:
 - CSS3 (with CSS Grid and Flexbox)
 - Vanilla JavaScript
 - Font Awesome Icons
-- Google Fonts (system fonts for performance)
+- System fonts (for performance)
 
 ## Browser Support
 

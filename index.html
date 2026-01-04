@@ -22,7 +22,7 @@
                 <li><a href="#projects">Projects</a></li>
                 <li><a href="#contact">Contact</a></li>
             </ul>
-            <div class="hamburger">
+            <div class="hamburger" aria-label="Toggle navigation menu" role="button" tabindex="0">
                 <span></span>
                 <span></span>
                 <span></span>
@@ -40,13 +40,13 @@
                 <a href="#projects" class="btn btn-secondary">View My Work</a>
             </div>
             <div class="social-links fade-in-delay-3">
-                <a href="https://github.com" target="_blank"><i class="fab fa-github"></i></a>
-                <a href="https://linkedin.com" target="_blank"><i class="fab fa-linkedin"></i></a>
-                <a href="https://twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>
-                <a href="mailto:your.email@example.com"><i class="fas fa-envelope"></i></a>
+                <a href="https://github.com" target="_blank" aria-label="GitHub profile"><i class="fab fa-github"></i></a>
+                <a href="https://linkedin.com" target="_blank" aria-label="LinkedIn profile"><i class="fab fa-linkedin"></i></a>
+                <a href="https://twitter.com" target="_blank" aria-label="Twitter profile"><i class="fab fa-twitter"></i></a>
+                <a href="mailto:your.email@example.com" aria-label="Send email"><i class="fas fa-envelope"></i></a>
             </div>
         </div>
-        <div class="scroll-indicator">
+        <div class="scroll-indicator" aria-hidden="true">
             <span></span>
         </div>
     </section>
@@ -260,8 +260,8 @@
                     <div class="project-image">
                         <img src="https://via.placeholder.com/400x250/667eea/ffffff?text=Project+1" alt="Project 1">
                         <div class="project-overlay">
-                            <a href="#" class="project-link"><i class="fas fa-external-link-alt"></i></a>
-                            <a href="#" class="project-link"><i class="fab fa-github"></i></a>
+                            <a href="#" class="project-link" aria-label="View live demo"><i class="fas fa-external-link-alt"></i></a>
+                            <a href="#" class="project-link" aria-label="View source code on GitHub"><i class="fab fa-github"></i></a>
                         </div>
                     </div>
                     <div class="project-info">
@@ -278,8 +278,8 @@
                     <div class="project-image">
                         <img src="https://via.placeholder.com/400x250/f093fb/ffffff?text=Project+2" alt="Project 2">
                         <div class="project-overlay">
-                            <a href="#" class="project-link"><i class="fas fa-external-link-alt"></i></a>
-                            <a href="#" class="project-link"><i class="fab fa-github"></i></a>
+                            <a href="#" class="project-link" aria-label="View live demo"><i class="fas fa-external-link-alt"></i></a>
+                            <a href="#" class="project-link" aria-label="View source code on GitHub"><i class="fab fa-github"></i></a>
                         </div>
                     </div>
                     <div class="project-info">
@@ -296,8 +296,8 @@
                     <div class="project-image">
                         <img src="https://via.placeholder.com/400x250/4facfe/ffffff?text=Project+3" alt="Project 3">
                         <div class="project-overlay">
-                            <a href="#" class="project-link"><i class="fas fa-external-link-alt"></i></a>
-                            <a href="#" class="project-link"><i class="fab fa-github"></i></a>
+                            <a href="#" class="project-link" aria-label="View live demo"><i class="fas fa-external-link-alt"></i></a>
+                            <a href="#" class="project-link" aria-label="View source code on GitHub"><i class="fab fa-github"></i></a>
                         </div>
                     </div>
                     <div class="project-info">
@@ -348,15 +348,19 @@
                 </div>
                 <form class="contact-form" id="contactForm">
                     <div class="form-group">
+                        <label for="name">Name</label>
                         <input type="text" id="name" name="name" placeholder="Your Name" required>
                     </div>
                     <div class="form-group">
+                        <label for="email">Email</label>
                         <input type="email" id="email" name="email" placeholder="Your Email" required>
                     </div>
                     <div class="form-group">
+                        <label for="subject">Subject</label>
                         <input type="text" id="subject" name="subject" placeholder="Subject" required>
                     </div>
                     <div class="form-group">
+                        <label for="message">Message</label>
                         <textarea id="message" name="message" rows="5" placeholder="Your Message" required></textarea>
                     </div>
                     <button type="submit" class="btn btn-primary">Send Message</button>

@@ -37,14 +37,17 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Navbar scroll effect
+    // Consolidated scroll handler for better performance
     const navbar = document.querySelector('.navbar');
-    let lastScroll = 0;
+    const heroContent = document.querySelector('.hero-content');
+    const sections = document.querySelectorAll('section[id]');
+    let heroScrollHandlerActive = true;
 
     window.addEventListener('scroll', () => {
-        const currentScroll = window.pageYOffset;
+        const scrolled = window.pageYOffset;
 
-        if (currentScroll > 100) {
+        // Navbar scroll effect
+        if (scrolled > 100) {
             navbar.style.background = 'rgba(255, 255, 255, 0.98)';
             navbar.style.boxShadow = '0 5px 20px rgba(0, 0, 0, 0.1)';
         } else {
@@ -52,7 +55,28 @@ document.addEventListener('DOMContentLoaded', function() {
             navbar.style.boxShadow = '0 5px 15px rgba(0, 0, 0, 0.1)';
         }
 
-        lastScroll = currentScroll;
+        // Parallax effect for hero section - with bounds checking
+        if (heroScrollHandlerActive && heroContent && scrolled < window.innerHeight) {
+            heroContent.style.transform = `translateY(${scrolled * 0.5}px)`;
+            heroContent.style.opacity = 1 - (scrolled / 500);
+        } else if (scrolled >= window.innerHeight) {
+            heroScrollHandlerActive = false; // Stop updating once past hero
+        }
+
+        // Active navigation link highlighting
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop - 100;
+            const sectionHeight = section.offsetHeight;
+            const sectionId = section.getAttribute('id');
+            const navLink = document.querySelector(`.nav-links a[href="#${sectionId}"]`);
+
+            if (scrolled >= sectionTop && scrolled < sectionTop + sectionHeight) {
+                navItems.forEach(item => item.classList.remove('active'));
+                if (navLink) {
+                    navLink.classList.add('active');
+                }
+            }
+        });
     });
 
     // Animated counters for statistics
@@ -172,6 +196,26 @@ document.addEventListener('DOMContentLoaded', function() {
             existingNotification.remove();
         }
 
+        // Add animation keyframes (only once)
+        let style = document.getElementById('notification-slidein-style');
+        if (!style) {
+            style = document.createElement('style');
+            style.id = 'notification-slidein-style';
+            style.textContent = `
+                @keyframes slideIn {
+                    from {
+                        transform: translateX(400px);
+                        opacity: 0;
+                    }
+                    to {
+                        transform: translateX(0);
+                        opacity: 1;
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+
         // Create notification element
         const notification = document.createElement('div');
         notification.className = `notification ${type}`;
@@ -191,22 +235,6 @@ document.addEventListener('DOMContentLoaded', function() {
             animation: slideIn 0.3s ease;
         `;
 
-        // Add animation
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes slideIn {
-                from {
-                    transform: translateX(400px);
-                    opacity: 0;
-                }
-                to {
-                    transform: translateX(0);
-                    opacity: 1;
-                }
-            }
-        `;
-        document.head.appendChild(style);
-
         // Add to page
         document.body.appendChild(notification);
 
@@ -220,38 +248,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }, 300);
         }, 3000);
     }
-
-    // Active navigation link highlighting
-    window.addEventListener('scroll', () => {
-        const sections = document.querySelectorAll('section[id]');
-        const scrollPosition = window.pageYOffset;
-
-        sections.forEach(section => {
-            const sectionTop = section.offsetTop - 100;
-            const sectionHeight = section.offsetHeight;
-            const sectionId = section.getAttribute('id');
-            const navLink = document.querySelector(`.nav-links a[href="#${sectionId}"]`);
-
-            if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
-                navItems.forEach(item => item.classList.remove('active'));
-                if (navLink) {
-                    navLink.classList.add('active');
-                }
-            }
-        });
-    });
-
-    // Add active class style
-    const activeStyle = document.createElement('style');
-    activeStyle.textContent = `
-        .nav-links a.active {
-            color: var(--primary-color);
-        }
-        .nav-links a.active::after {
-            width: 100%;
-        }
-    `;
-    document.head.appendChild(activeStyle);
 
     // Typing effect for hero section (optional enhancement)
     const heroTitle = document.querySelector('.hero h1');
@@ -275,17 +271,6 @@ document.addEventListener('DOMContentLoaded', function() {
         // setTimeout(typeWriter, 500);
     }
 
-    // Parallax effect for hero section
-    window.addEventListener('scroll', () => {
-        const scrolled = window.pageYOffset;
-        const heroContent = document.querySelector('.hero-content');
-        
-        if (heroContent && scrolled < window.innerHeight) {
-            heroContent.style.transform = `translateY(${scrolled * 0.5}px)`;
-            heroContent.style.opacity = 1 - (scrolled / 500);
-        }
-    });
-
     // Lazy loading for project images
     if ('IntersectionObserver' in window) {
         const imageObserver = new IntersectionObserver((entries, observer) => {
@@ -302,13 +287,12 @@ document.addEventListener('DOMContentLoaded', function() {
         images.forEach(img => imageObserver.observe(img));
     }
 
-    // Add cursor trail effect (optional, can be removed if too much)
+    // Uncomment to enable cursor trail
+    /*
     const coords = { x: 0, y: 0 };
     const circles = [];
     const numCircles = 20;
 
-    // Uncomment to enable cursor trail
-    /*
     for (let i = 0; i < numCircles; i++) {
         const circle = document.createElement('div');
         circle.style.cssText = `
