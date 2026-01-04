@@ -19,6 +19,48 @@ Notes:
 
 ---
 
+## Troubleshooting Pages Deployment
+
+If the Pages deployment workflow fails, try these steps:
+
+### 1. Check Workflow Run Status
+- Go to the Actions tab: https://github.com/Dbourassa11/interactive-resume/actions
+- Click on the failed "Deploy to GitHub Pages" workflow run
+- Review the error logs to identify the issue
+
+### 2. Enable Actions Permissions for Pages
+If you see permission errors:
+1. Go to **Settings** → **Actions** → **General**
+2. Under "Workflow permissions", ensure one of the following is selected:
+   - "Read and write permissions" is enabled, OR
+   - "Read repository contents and packages permissions" with additional "Allow GitHub Actions to create and approve pull requests" if needed
+3. Go to **Settings** → **Pages**
+4. Under "Build and deployment", ensure **Source** is set to "GitHub Actions"
+
+### 3. Re-run Failed Workflow
+1. Go to the Actions tab
+2. Click on the failed workflow run
+3. Click "Re-run all jobs" button in the top right
+4. Wait for the workflow to complete
+
+### 4. Trigger Deployment with Empty Commit
+If the workflow doesn't trigger automatically:
+```bash
+git commit --allow-empty -m "Trigger Pages deployment"
+git push origin main
+```
+
+### 5. Common Issues
+- **Permissions error**: Enable "Read and write permissions" in Settings → Actions → General
+- **Pages not enabled**: Go to Settings → Pages and set Source to "GitHub Actions"
+- **Workflow not found**: Ensure `.github/workflows/deploy-pages.yml` exists in the main branch
+- **Build artifacts issue**: Check that the workflow has proper `permissions` set (pages: write, id-token: write)
+
+### Recent Deployment Status
+The most recent workflow run can be found at: https://github.com/Dbourassa11/interactive-resume/actions/runs/20697091106
+
+---
+
 Test locally:
 
 ```bash
