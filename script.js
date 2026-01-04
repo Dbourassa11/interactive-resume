@@ -55,14 +55,15 @@ document.addEventListener('DOMContentLoaded', function() {
     const contactForm = document.querySelector('.contact-form');
     
     if (contactForm) {
-        contactForm.addEventListener('submit', function(e) {
+        contactForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
             // Basic validation
             const name = document.getElementById('name').value.trim();
             const email = document.getElementById('email').value.trim();
             const message = document.getElementById('message').value.trim();
             
             if (!name || !email || !message) {
-                e.preventDefault();
                 alert('Please fill in all fields.');
                 return false;
             }
@@ -70,13 +71,54 @@ document.addEventListener('DOMContentLoaded', function() {
             // Email validation
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!emailRegex.test(email)) {
-                e.preventDefault();
                 alert('Please enter a valid email address.');
                 return false;
             }
             
-            // If all validation passes, the form will submit to Formspree
-            // Note: User needs to replace YOUR_FORM_ID with actual Formspree ID
+            // Get submit button reference
+            const submitButton = contactForm.querySelector('button[type="submit"]');
+            if (!submitButton) return;
+            
+            const originalButtonText = submitButton.textContent;
+            
+            // Submit form via fetch API
+            try {
+                submitButton.textContent = 'Sending...';
+                submitButton.disabled = true;
+                
+                const formData = new FormData(contactForm);
+                const response = await fetch(contactForm.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+                
+                if (response.ok) {
+                    alert('Thank you for your message! I will get back to you soon.');
+                    contactForm.reset();
+                    submitButton.textContent = originalButtonText;
+                    submitButton.disabled = false;
+                } else {
+                    let errorMessage = 'Oops! There was a problem submitting your form. Please try again or email me directly.';
+                    try {
+                        const data = await response.json();
+                        if (data.errors) {
+                            errorMessage = 'Error: ' + data.errors.map(error => error.message).join(', ');
+                        }
+                    } catch (jsonError) {
+                        // If response is not JSON, use default error message
+                    }
+                    alert(errorMessage);
+                    submitButton.textContent = originalButtonText;
+                    submitButton.disabled = false;
+                }
+            } catch (error) {
+                alert('Oops! There was a problem submitting your form. Please try again or email me directly at Quantum.Concepts@outlook.com');
+                submitButton.textContent = originalButtonText;
+                submitButton.disabled = false;
+            }
         });
     }
     
