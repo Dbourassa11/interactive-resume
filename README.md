@@ -5,10 +5,13 @@ An interactive, accessible, and responsive online resume for Charles David Boura
 ## Features
 
 - **Responsive Design**: Optimized for desktop, tablet, and mobile devices
+- **Modern Dark Theme**: Professional dark color scheme with cyan accents
 - **Accessibility**: WCAG compliant with ARIA labels, skip-to-content link, and keyboard navigation
 - **SEO Optimized**: Meta tags, Open Graph, and Twitter Card integration
 - **Contact Form**: Integrated with Formspree for easy contact
-- **Modern UI**: Clean, professional design with smooth animations
+- **Projects Showcase**: Visual project cards with images and descriptions
+- **GitHub Stats**: Live GitHub contribution statistics
+- **Smooth Animations**: Professional fade-in and hover effects
 - **Print Friendly**: Optimized styles for printing
 
 ## Setup
@@ -24,27 +27,36 @@ To enable the contact form:
    <form action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
    ```
 
-### Deployment
+## Deployment
 
 This resume can be deployed to:
-- GitHub Pages
+- GitHub Pages (recommended)
 - Netlify
 - Vercel
 - Any static hosting service
 
-#### GitHub Pages Deployment
+### GitHub Pages Deployment
 
 1. Push the code to your GitHub repository
-2. Go to repository Settings > Pages
-3. Select the branch to deploy (e.g., `main` or `feature/complete-resume`)
-4. Save and wait for deployment
+2. Go to repository Settings → Pages
+3. Under "Source", select the branch to deploy (usually `main`)
+4. Select the folder: `/ (root)`
+5. Click "Save" and wait for deployment (usually takes 1-2 minutes)
+6. Your site will be available at: **https://dbourassa11.github.io/interactive-resume/**
+
+The repository includes a GitHub Actions workflow (`.github/workflows/deploy-pages.yml`) that automatically deploys changes when pushed to the main branch.
 
 ## Files
 
-- `index.html` - Main HTML structure
-- `styles.css` - Styling and responsive design
-- `script.js` - Interactive features and smooth scrolling
-- `favicon.ico`, `favicon-32x32.png`, `favicon-16x16.png` - Site favicons
+- `index.html` - Main HTML structure with semantic markup
+- `styles.css` - Styling with dark theme and responsive design
+- `script.js` - Interactive features, smooth scrolling, and accessibility helpers
+- `assets/` - Project images and avatar
+  - `avatar.png` - Profile picture
+  - `quantum-psi-bridge.png` - Quantum Psi Bridge project image
+  - `swarm-coding-app.png` - Swarm Coding App project image
+- `favicon.ico`, `favicon-32x32.png`, `favicon-16x16.png`, `favicon.svg` - Site favicons
+- `.github/workflows/deploy-pages.yml` - GitHub Pages deployment workflow
 
 ## Customization
 
