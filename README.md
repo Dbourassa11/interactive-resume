@@ -5,13 +5,10 @@ An interactive, accessible, and responsive online resume for Charles David Boura
 ## Features
 
 - **Responsive Design**: Optimized for desktop, tablet, and mobile devices
-- **Modern Dark Theme**: Professional dark color scheme with cyan accents
 - **Accessibility**: WCAG compliant with ARIA labels, skip-to-content link, and keyboard navigation
 - **SEO Optimized**: Meta tags, Open Graph, and Twitter Card integration
 - **Contact Form**: Integrated with Formspree for easy contact
-- **Projects Showcase**: Visual project cards with images and descriptions
-- **GitHub Stats**: Live GitHub contribution statistics
-- **Smooth Animations**: Professional fade-in and hover effects
+- **Modern UI**: Clean, professional design with smooth animations
 - **Print Friendly**: Optimized styles for printing
 
 ## Setup
@@ -27,36 +24,27 @@ To enable the contact form:
    <form action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
    ```
 
-## Deployment
+### Deployment
 
 This resume can be deployed to:
-- GitHub Pages (recommended)
+- GitHub Pages
 - Netlify
 - Vercel
 - Any static hosting service
 
-### GitHub Pages Deployment
+#### GitHub Pages Deployment
 
 1. Push the code to your GitHub repository
-2. Go to repository Settings → Pages
-3. Under "Source", select the branch to deploy (usually `main`)
-4. Select the folder: `/ (root)`
-5. Click "Save" and wait for deployment (usually takes 1-2 minutes)
-6. Your site will be available at: **https://dbourassa11.github.io/interactive-resume/**
-
-The repository includes a GitHub Actions workflow (`.github/workflows/deploy-pages.yml`) that automatically deploys changes when pushed to the main branch.
+2. Go to repository Settings > Pages
+3. Select the branch to deploy (e.g., `main` or `feature/complete-resume`)
+4. Save and wait for deployment
 
 ## Files
 
-- `index.html` - Main HTML structure with semantic markup
-- `styles.css` - Styling with dark theme and responsive design
-- `script.js` - Interactive features, smooth scrolling, and accessibility helpers
-- `assets/` - Project images and avatar
-  - `avatar.png` - Profile picture
-  - `quantum-psi-bridge.png` - Quantum Psi Bridge project image
-  - `swarm-coding-app.png` - Swarm Coding App project image
-- `favicon.ico`, `favicon-32x32.png`, `favicon-16x16.png`, `favicon.svg` - Site favicons
-- `.github/workflows/deploy-pages.yml` - GitHub Pages deployment workflow
+- `index.html` - Main HTML structure
+- `styles.css` - Styling and responsive design
+- `script.js` - Interactive features and smooth scrolling
+- `favicon.ico`, `favicon-32x32.png`, `favicon-16x16.png` - Site favicons
 
 ## Customization
 
@@ -90,3 +78,76 @@ To customize for your own use:
 - **Location**: Albuquerque, NM, USA
 - **GitHub**: [Dbourassa11](https://github.com/Dbourassa11)
 - **LinkedIn**: [charlesdbourassa](https://www.linkedin.com/in/charlesdbourassa)
+
+---
+
+## Testing
+
+This project includes a comprehensive test suite with 230+ test cases covering all aspects of the interactive resume.
+
+### Test Coverage
+
+The test suite includes:
+
+1. **Unit Tests for JavaScript** (`tests/script.test.js`)
+   - 60+ test cases for all interactive features
+   - Smooth scrolling and navigation
+   - Form validation and submission
+   - Intersection Observer for animations
+   - Keyboard navigation
+   - Edge cases and error handling
+
+2. **HTML Validation Tests** (`tests/html.validation.test.js`)
+   - 80+ test cases for HTML structure
+   - SEO meta tags validation
+   - Accessibility features verification
+   - Semantic HTML structure
+   - Social media integration
+
+3. **CSS Validation Tests** (`tests/css.validation.test.js`)
+   - 90+ test cases for styling
+   - Responsive design verification
+   - Accessibility features (focus states, skip links)
+   - Animation and transition validation
+   - Print styles verification
+
+### Running Tests
+
+Install dependencies:
+```bash
+npm install
+```
+
+Run all tests:
+```bash
+npm test
+```
+
+Run tests with coverage report:
+```bash
+npm run test:coverage
+```
+
+Run specific test suites:
+```bash
+npm run test:script    # JavaScript functionality tests
+npm run test:html      # HTML structure tests
+npm run test:css       # CSS styling tests
+```
+
+### Test Technologies
+
+- **Jest** - Testing framework
+- **jsdom** - DOM simulation for browser environment
+- **@testing-library/jest-dom** - Custom matchers for DOM testing
+
+### Coverage Goals
+
+All tests target 80%+ coverage across:
+- Functions
+- Lines
+- Branches
+- Statements
+
+For detailed testing documentation, see [tests/README.md](tests/README.md).
+
