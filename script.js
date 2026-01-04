@@ -212,7 +212,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Remove after 3 seconds
         setTimeout(() => {
-            notification.style.animation = 'slideIn 0.3s ease reverse';
+            notification.style.transform = 'translateX(400px)';
+            notification.style.opacity = '0';
+            notification.style.transition = 'all 0.3s ease';
             setTimeout(() => {
                 notification.remove();
             }, 300);
