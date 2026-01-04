@@ -82,10 +82,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 return false;
             }
             
+            // Get submit button reference
+            const submitButton = contactForm.querySelector('button[type="submit"]');
+            if (!submitButton) return;
+            
+            const originalButtonText = submitButton.textContent;
+            
             // Submit form via fetch API
             try {
-                const submitButton = contactForm.querySelector('button[type="submit"]');
-                const originalButtonText = submitButton.textContent;
                 submitButton.textContent = 'Sending...';
                 submitButton.disabled = true;
                 
@@ -101,21 +105,25 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (response.ok) {
                     alert('Thank you for your message! I will get back to you soon.');
                     contactForm.reset();
+                    submitButton.textContent = originalButtonText;
+                    submitButton.disabled = false;
                 } else {
-                    const data = await response.json();
-                    if (data.errors) {
-                        alert('Error: ' + data.errors.map(error => error.message).join(', '));
-                    } else {
-                        alert('Oops! There was a problem submitting your form. Please try again or email me directly.');
+                    let errorMessage = 'Oops! There was a problem submitting your form. Please try again or email me directly.';
+                    try {
+                        const data = await response.json();
+                        if (data.errors) {
+                            errorMessage = 'Error: ' + data.errors.map(error => error.message).join(', ');
+                        }
+                    } catch (jsonError) {
+                        // If response is not JSON, use default error message
                     }
+                    alert(errorMessage);
+                    submitButton.textContent = originalButtonText;
+                    submitButton.disabled = false;
                 }
-                
-                submitButton.textContent = originalButtonText;
-                submitButton.disabled = false;
             } catch (error) {
                 alert('Oops! There was a problem submitting your form. Please try again or email me directly at Quantum.Concepts@outlook.com');
-                const submitButton = contactForm.querySelector('button[type="submit"]');
-                submitButton.textContent = 'Send Message';
+                submitButton.textContent = originalButtonText;
                 submitButton.disabled = false;
             }
         });
