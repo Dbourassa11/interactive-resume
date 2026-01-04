@@ -16,6 +16,11 @@
     --text-lighter: #b0bec5;
     --white: #ffffff;
     --transition: all 0.3s ease;
+    /* Semi-transparent variations */
+    --primary-color-10: rgba(79, 195, 247, 0.1);
+    --primary-color-05: rgba(79, 195, 247, 0.05);
+    --primary-color-08: rgba(79, 195, 247, 0.08);
+    --primary-color-30: rgba(79, 195, 247, 0.3);
 }
 
 body {
@@ -155,7 +160,7 @@ main {
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background-color: rgba(79, 195, 247, 0.1);
+    background-color: var(--primary-color-10);
 }
 
 .social-links a:hover,
@@ -180,7 +185,7 @@ main {
     height: auto;
     border-radius: 50%;
     border: 3px solid var(--primary-color);
-    box-shadow: 0 4px 8px rgba(79, 195, 247, 0.3);
+    box-shadow: 0 4px 8px var(--primary-color-30);
 }
 
 /* Sections */
@@ -212,7 +217,7 @@ section h2 {
 .job {
     margin-bottom: 2rem;
     padding: 1.5rem;
-    background-color: rgba(79, 195, 247, 0.05);
+    background-color: var(--primary-color-05);
     border-radius: 8px;
     border-left: 3px solid var(--secondary-color);
 }
@@ -265,7 +270,7 @@ section h2 {
 
 .skills-list li,
 .skill-card {
-    background-color: rgba(79, 195, 247, 0.08);
+    background-color: var(--primary-color-08);
     padding: 1.5rem;
     border-radius: 6px;
     text-align: center;
@@ -291,7 +296,7 @@ section h2 {
     background-color: var(--secondary-color);
     color: var(--dark-bg);
     transform: translateY(-3px);
-    box-shadow: 0 4px 8px rgba(79, 195, 247, 0.3);
+    box-shadow: 0 4px 8px var(--primary-color-30);
     border-color: var(--primary-color);
 }
 
@@ -344,7 +349,7 @@ section h2 {
 
 .project-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 5px 15px rgba(79, 195, 247, 0.3);
+    box-shadow: 0 5px 15px var(--primary-color-30);
 }
 
 .project-card img {
