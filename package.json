@@ -1,19 +1,31 @@
 {
   "name": "interactive-resume",
-  "version": "1.0.0",
-  "description": "Interactive Resume - Professional Portfolio",
+  "version": "2.0.0",
+  "description": "Interactive resume with comprehensive test coverage",
   "main": "script.js",
   "scripts": {
     "test": "jest",
     "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage"
+    "test:coverage": "jest --coverage",
+    "test:verbose": "jest --verbose",
+    "test:script": "jest tests/script.test.js",
+    "test:html": "jest tests/html.validation.test.js",
+    "test:css": "jest tests/css.validation.test.js"
   },
-  "keywords": ["resume", "portfolio", "interactive"],
-  "author": "",
+  "keywords": [
+    "resume",
+    "interactive",
+    "portfolio",
+    "testing",
+    "jest",
+    "accessibility"
+  ],
+  "author": "Interactive Resume",
   "license": "MIT",
   "devDependencies": {
-    "@types/jest": "^29.5.0",
-    "jest": "^29.5.0",
-    "jest-environment-jsdom": "^29.5.0"
+    "@testing-library/dom": "^9.3.3",
+    "@testing-library/jest-dom": "^6.1.5",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0"
   }
 }
