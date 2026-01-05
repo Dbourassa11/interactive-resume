@@ -1,0 +1,20 @@
+{
+  "name": "interactive-resume",
+  "version": "1.0.0",
+  "description": "Interactive Resume Website",
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "test:verbose": "jest --verbose"
+  },
+  "keywords": ["resume", "portfolio", "interactive"],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "@testing-library/dom": "^9.3.3",
+    "@testing-library/jest-dom": "^6.1.5"
+  }
+}
