@@ -1,762 +1,637 @@
 /**
- * CSS Validation and Quality Tests
- * Validates CSS structure, syntax, best practices, and design patterns
+ * Comprehensive CSS Validation Tests
+ * Tests CSS structure, styling, responsiveness, and best practices
  */
 
 const fs = require('fs');
 const path = require('path');
 
-describe('CSS Validation Tests', () => {
+describe('CSS Structure and Validation', () => {
   let cssContent;
 
   beforeAll(() => {
-    cssContent = fs.readFileSync(path.join(__dirname, '../styles.css'), 'utf8');
+    cssContent = fs.readFileSync(path.resolve(__dirname, '../styles.css'), 'utf8');
   });
 
-  describe('CSS Reset and Base Styles', () => {
+  describe('CSS Variables and Theme', () => {
+    test('should define root CSS variables', () => {
+      expect(cssContent).toMatch(/:root\s*{/);
+    });
+
+    test('should define primary color variable', () => {
+      expect(cssContent).toMatch(/--primary-color:\s*#[0-9a-f]{3,6}/i);
+    });
+
+    test('should define secondary color variable', () => {
+      expect(cssContent).toMatch(/--secondary-color:\s*#[0-9a-f]{3,6}/i);
+    });
+
+    test('should define accent color variable', () => {
+      expect(cssContent).toMatch(/--accent-color:\s*#[0-9a-f]{3,6}/i);
+    });
+
+    test('should define text colors', () => {
+      expect(cssContent).toMatch(/--text-dark/);
+      expect(cssContent).toMatch(/--text-light/);
+    });
+
+    test('should define shadow variables', () => {
+      expect(cssContent).toMatch(/--shadow:/);
+      expect(cssContent).toMatch(/--shadow-hover:/);
+    });
+
+    test('should define transition variable', () => {
+      expect(cssContent).toMatch(/--transition:/);
+    });
+
+    test('should use CSS variables throughout stylesheet', () => {
+      const varUsage = cssContent.match(/var\(--[a-z-]+\)/gi);
+      expect(varUsage).toBeTruthy();
+      expect(varUsage.length).toBeGreaterThan(20);
+    });
+  });
+
+  describe('Global Styles', () => {
     test('should have universal selector reset', () => {
-      expect(cssContent).toMatch(/\*\s*\{[^}]*margin:\s*0/i);
-      expect(cssContent).toMatch(/\*\s*\{[^}]*padding:\s*0/i);
-      expect(cssContent).toMatch(/\*\s*\{[^}]*box-sizing:\s*border-box/i);
+      expect(cssContent).toMatch(/\*\s*{[^}]*margin:\s*0/);
+      expect(cssContent).toMatch(/\*\s*{[^}]*padding:\s*0/);
+      expect(cssContent).toMatch(/\*\s*{[^}]*box-sizing:\s*border-box/);
     });
 
-    test('should define body styles', () => {
-      expect(cssContent).toMatch(/body\s*\{/i);
-    });
-
-    test('should have font-family defined', () => {
-      expect(cssContent).toMatch(/font-family:/i);
-    });
-
-    test('should have line-height for readability', () => {
-      expect(cssContent).toMatch(/line-height:/i);
-    });
-  });
-
-  describe('CSS Custom Properties (Variables)', () => {
-    test('should define CSS custom properties in :root', () => {
-      expect(cssContent).toMatch(/:root\s*\{/i);
-    });
-
-    test('should have color variables', () => {
-      expect(cssContent).toMatch(/--primary-color:/i);
-      expect(cssContent).toMatch(/--secondary-color:/i);
-      expect(cssContent).toMatch(/--accent-color:/i);
-    });
-
-    test('should have text color variables', () => {
-      expect(cssContent).toMatch(/--text-dark:/i);
-      expect(cssContent).toMatch(/--text-light:/i);
-    });
-
-    test('should have background color variables', () => {
-      expect(cssContent).toMatch(/--bg-light:/i);
-      expect(cssContent).toMatch(/--white:/i);
-    });
-
-    test('should have shadow variables', () => {
-      expect(cssContent).toMatch(/--shadow:/i);
-    });
-
-    test('should have transition variable', () => {
-      expect(cssContent).toMatch(/--transition:/i);
-    });
-
-    test('should use var() function to reference custom properties', () => {
-      expect(cssContent).toMatch(/var\(--[a-z-]+\)/i);
-    });
-
-    test('should have valid hex color values', () => {
-      const hexColors = cssContent.match(/#[0-9a-f]{3,6}/gi);
-      expect(hexColors).toBeTruthy();
-      hexColors.forEach(color => {
-        expect(color).toMatch(/^#[0-9a-f]{3}$|^#[0-9a-f]{6}$/i);
-      });
-    });
-  });
-
-  describe('Layout and Container Styles', () => {
-    test('should have container class', () => {
-      expect(cssContent).toMatch(/\.container\s*\{/i);
-    });
-
-    test('should have max-width for containers', () => {
-      expect(cssContent).toMatch(/max-width:/i);
-    });
-
-    test('should have margin auto for centering', () => {
-      expect(cssContent).toMatch(/margin:\s*0\s+auto/i);
-    });
-
-    test('should have padding for containers', () => {
-      const containerMatch = cssContent.match(/\.container\s*\{[^}]*\}/is);
-      if (containerMatch) {
-        expect(containerMatch[0]).toMatch(/padding:/i);
-      }
-    });
-  });
-
-  describe('Smooth Scrolling', () => {
     test('should enable smooth scrolling on html', () => {
-      expect(cssContent).toMatch(/html\s*\{[^}]*scroll-behavior:\s*smooth/i);
+      expect(cssContent).toMatch(/html\s*{[^}]*scroll-behavior:\s*smooth/);
+    });
+
+    test('should define body font family', () => {
+      expect(cssContent).toMatch(/body\s*{[^}]*font-family:/);
+    });
+
+    test('should define body line-height', () => {
+      expect(cssContent).toMatch(/body\s*{[^}]*line-height:/);
+    });
+
+    test('should prevent horizontal overflow on body', () => {
+      expect(cssContent).toMatch(/body\s*{[^}]*overflow-x:\s*hidden/);
+    });
+
+    test('should define container max-width', () => {
+      expect(cssContent).toMatch(/\.container\s*{[^}]*max-width:/);
     });
   });
 
   describe('Navigation Styles', () => {
-    test('should have navbar styles', () => {
-      expect(cssContent).toMatch(/\.navbar\s*\{/i);
+    test('should have fixed navbar positioning', () => {
+      expect(cssContent).toMatch(/\.navbar\s*{[^}]*position:\s*fixed/);
     });
 
-    test('should have fixed positioning for navbar', () => {
-      expect(cssContent).toMatch(/\.navbar\s*\{[^}]*position:\s*fixed/is);
+    test('should have navbar z-index for layering', () => {
+      expect(cssContent).toMatch(/\.navbar\s*{[^}]*z-index:/);
     });
 
-    test('should have z-index for navbar', () => {
-      const navbarMatch = cssContent.match(/\.navbar\s*\{[^}]*\}/is);
-      if (navbarMatch) {
-        expect(navbarMatch[0]).toMatch(/z-index:/i);
-      }
+    test('should style logo with gradient', () => {
+      expect(cssContent).toMatch(/\.logo\s*{[^}]*background:\s*linear-gradient/);
     });
 
-    test('should have nav-links styles', () => {
-      expect(cssContent).toMatch(/\.nav-links\s*\{/i);
+    test('should use flexbox for nav-links', () => {
+      expect(cssContent).toMatch(/\.nav-links\s*{[^}]*display:\s*flex/);
     });
 
-    test('should use flexbox for navigation', () => {
-      expect(cssContent).toMatch(/\.nav-links\s*\{[^}]*display:\s*flex/is);
+    test('should remove list-style from nav-links', () => {
+      expect(cssContent).toMatch(/\.nav-links\s*{[^}]*list-style:\s*none/);
     });
 
-    test('should have logo styles', () => {
-      expect(cssContent).toMatch(/\.logo\s*\{/i);
+    test('should have hover effect on nav links', () => {
+      expect(cssContent).toMatch(/\.nav-links\s+a:hover/);
     });
 
-    test('should have hamburger menu styles', () => {
-      expect(cssContent).toMatch(/\.hamburger\s*\{/i);
+    test('should have active state for nav links', () => {
+      expect(cssContent).toMatch(/\.nav-links\s+a\.active/);
     });
 
-    test('should have hover effects on navigation links', () => {
-      expect(cssContent).toMatch(/\.nav-links\s+a:hover/i);
+    test('should have after pseudo-element for nav link underline', () => {
+      expect(cssContent).toMatch(/\.nav-links\s+a::after/);
     });
 
-    test('should have active state styles', () => {
-      expect(cssContent).toMatch(/\.active/i);
-    });
-
-    test('should use pseudo-elements for link animations', () => {
-      expect(cssContent).toMatch(/::after|::before/i);
+    test('should hide hamburger by default (desktop-first)', () => {
+      expect(cssContent).toMatch(/\.hamburger\s*{[^}]*display:\s*none/);
     });
   });
 
   describe('Hero Section Styles', () => {
-    test('should have hero styles', () => {
-      expect(cssContent).toMatch(/\.hero\s*\{/i);
+    test('should have full viewport height for hero', () => {
+      expect(cssContent).toMatch(/\.hero\s*{[^}]*min-height:\s*100vh/);
     });
 
-    test('should have min-height for hero', () => {
-      const heroMatch = cssContent.match(/\.hero\s*\{[^}]*\}/is);
-      if (heroMatch) {
-        expect(heroMatch[0]).toMatch(/min-height:/i);
-      }
+    test('should use flexbox for hero centering', () => {
+      expect(cssContent).toMatch(/\.hero\s*{[^}]*display:\s*flex/);
+      expect(cssContent).toMatch(/\.hero\s*{[^}]*align-items:\s*center/);
     });
 
-    test('should use flexbox for hero layout', () => {
-      expect(cssContent).toMatch(/\.hero\s*\{[^}]*display:\s*flex/is);
+    test('should have gradient background for hero', () => {
+      expect(cssContent).toMatch(/\.hero\s*{[^}]*background:\s*linear-gradient/);
     });
 
-    test('should have gradient background', () => {
-      expect(cssContent).toMatch(/linear-gradient/i);
+    test('should have before pseudo-element for hero pattern', () => {
+      expect(cssContent).toMatch(/\.hero::before/);
     });
 
-    test('should have hero-content styles', () => {
-      expect(cssContent).toMatch(/\.hero-content\s*\{/i);
+    test('should center hero content text', () => {
+      expect(cssContent).toMatch(/\.hero-content\s*{[^}]*text-align:\s*center/);
     });
 
-    test('should have scroll indicator styles', () => {
-      expect(cssContent).toMatch(/\.scroll-indicator/i);
+    test('should have large heading font size', () => {
+      const h1Match = cssContent.match(/\.hero\s+h1\s*{[^}]*font-size:\s*([\d.]+)rem/);
+      expect(h1Match).toBeTruthy();
+      expect(parseFloat(h1Match[1])).toBeGreaterThan(2);
+    });
+
+    test('should style CTA buttons', () => {
+      expect(cssContent).toMatch(/\.btn\s*{[^}]*padding:/);
+      expect(cssContent).toMatch(/\.btn\s*{[^}]*border-radius:/);
+    });
+
+    test('should have hover effect on buttons', () => {
+      expect(cssContent).toMatch(/\.btn-primary:hover/);
+      expect(cssContent).toMatch(/\.btn-secondary:hover/);
+    });
+
+    test('should have scroll indicator animation', () => {
+      expect(cssContent).toMatch(/@keyframes\s+scroll/);
     });
   });
 
   describe('Section Styles', () => {
-    test('should have section class styles', () => {
-      expect(cssContent).toMatch(/\.section\s*\{/i);
+    test('should have consistent padding for sections', () => {
+      expect(cssContent).toMatch(/\.section\s*{[^}]*padding:/);
     });
 
-    test('should have section-title styles', () => {
-      expect(cssContent).toMatch(/\.section-title\s*\{/i);
+    test('should have bg-light background class', () => {
+      expect(cssContent).toMatch(/\.bg-light\s*{[^}]*background:/);
     });
 
-    test('should have padding for sections', () => {
-      const sectionMatch = cssContent.match(/\.section\s*\{[^}]*\}/is);
-      if (sectionMatch) {
-        expect(sectionMatch[0]).toMatch(/padding:/i);
-      }
+    test('should center section titles', () => {
+      expect(cssContent).toMatch(/\.section-title\s*{[^}]*text-align:\s*center/);
     });
 
-    test('should have bg-light utility class', () => {
-      expect(cssContent).toMatch(/\.bg-light\s*\{/i);
-    });
-  });
-
-  describe('Button Styles', () => {
-    test('should have button styles', () => {
-      expect(cssContent).toMatch(/\.btn\s*\{/i);
+    test('should have after pseudo-element for section title underline', () => {
+      expect(cssContent).toMatch(/\.section-title::after/);
     });
 
-    test('should have btn-primary styles', () => {
-      expect(cssContent).toMatch(/\.btn-primary\s*\{/i);
-    });
-
-    test('should have btn-secondary styles', () => {
-      expect(cssContent).toMatch(/\.btn-secondary\s*\{/i);
-    });
-
-    test('should have hover effects on buttons', () => {
-      expect(cssContent).toMatch(/\.btn:hover/i);
-    });
-
-    test('should have transform on button hover', () => {
-      const btnHoverMatch = cssContent.match(/\.btn[^{]*:hover\s*\{[^}]*\}/is);
-      if (btnHoverMatch) {
-        expect(btnHoverMatch[0]).toMatch(/transform:/i);
-      }
-    });
-
-    test('should remove text decoration from button links', () => {
-      expect(cssContent).toMatch(/text-decoration:\s*none/i);
-    });
-
-    test('should have cursor pointer for interactive elements', () => {
-      expect(cssContent).toMatch(/cursor:\s*pointer/i);
+    test('should position section title underline with transform', () => {
+      const afterMatch = cssContent.match(/\.section-title::after\s*{([^}]*)}/);
+      expect(afterMatch).toBeTruthy();
+      expect(afterMatch[1]).toMatch(/transform:\s*translateX\(-50%\)/);
     });
   });
 
-  describe('Statistics Section', () => {
-    test('should have stats styles', () => {
-      expect(cssContent).toMatch(/\.stats\s*\{/i);
+  describe('Statistics Styles', () => {
+    test('should use grid for stats layout', () => {
+      expect(cssContent).toMatch(/\.stats\s*{[^}]*display:\s*grid/);
     });
 
-    test('should have stat-item styles', () => {
-      expect(cssContent).toMatch(/\.stat-item\s*\{/i);
+    test('should have stat-item hover effect', () => {
+      expect(cssContent).toMatch(/\.stat-item:hover/);
+      expect(cssContent).toMatch(/transform:\s*translateY\(-\d+px\)/);
     });
 
-    test('should have stat-number styles', () => {
-      expect(cssContent).toMatch(/\.stat-number\s*\{/i);
+    test('should use gradient for stat numbers', () => {
+      expect(cssContent).toMatch(/\.stat-number\s*{[^}]*background:\s*linear-gradient/);
     });
 
-    test('should have stat-label styles', () => {
-      expect(cssContent).toMatch(/\.stat-label\s*\{/i);
+    test('should use background-clip for gradient text', () => {
+      expect(cssContent).toMatch(/\.stat-number\s*{[^}]*-webkit-background-clip:\s*text/);
+      expect(cssContent).toMatch(/\.stat-number\s*{[^}]*-webkit-text-fill-color:\s*transparent/);
     });
   });
 
-  describe('Skills Section', () => {
-    test('should have skills-grid styles', () => {
-      expect(cssContent).toMatch(/\.skills-grid\s*\{/i);
-    });
-
-    test('should have skill-category styles', () => {
-      expect(cssContent).toMatch(/\.skill-category\s*\{/i);
+  describe('Skills Section Styles', () => {
+    test('should use grid for skills layout', () => {
+      expect(cssContent).toMatch(/\.skills-grid\s*{[^}]*display:\s*grid/);
     });
 
     test('should have skill-bar styles', () => {
-      expect(cssContent).toMatch(/\.skill-bar\s*\{/i);
+      expect(cssContent).toMatch(/\.skill-bar\s*{/);
     });
 
-    test('should have progress bar styles', () => {
-      expect(cssContent).toMatch(/\.progress\s*\{/i);
-      expect(cssContent).toMatch(/\.progress-bar\s*\{/i);
+    test('should have progress bar container', () => {
+      expect(cssContent).toMatch(/\.progress\s*{[^}]*height:/);
+      expect(cssContent).toMatch(/\.progress\s*{[^}]*border-radius:/);
     });
 
-    test('should have transition on progress bars', () => {
-      const progressMatch = cssContent.match(/\.progress-bar\s*\{[^}]*\}/is);
-      if (progressMatch) {
-        expect(progressMatch[0]).toMatch(/transition:/i);
-      }
+    test('should have progress-bar with gradient', () => {
+      expect(cssContent).toMatch(/\.progress-bar\s*{[^}]*background:\s*linear-gradient/);
+    });
+
+    test('should have transition on progress-bar width', () => {
+      expect(cssContent).toMatch(/\.progress-bar\s*{[^}]*transition:[^}]*width/);
+    });
+
+    test('should start progress-bar at width 0', () => {
+      expect(cssContent).toMatch(/\.progress-bar\s*{[^}]*width:\s*0/);
+    });
+
+    test('should use flexbox for skill-info', () => {
+      expect(cssContent).toMatch(/\.skill-info\s*{[^}]*display:\s*flex/);
+      expect(cssContent).toMatch(/\.skill-info\s*{[^}]*justify-content:\s*space-between/);
     });
   });
 
   describe('Timeline Styles', () => {
-    test('should have timeline styles', () => {
-      expect(cssContent).toMatch(/\.timeline\s*\{/i);
+    test('should have timeline with before pseudo-element line', () => {
+      expect(cssContent).toMatch(/\.timeline::before/);
     });
 
-    test('should have timeline-item styles', () => {
-      expect(cssContent).toMatch(/\.timeline-item\s*\{/i);
+    test('should position timeline line absolutely', () => {
+      const timelineBeforeMatch = cssContent.match(/\.timeline::before\s*{([^}]*)}/);
+      expect(timelineBeforeMatch).toBeTruthy();
+      expect(timelineBeforeMatch[1]).toMatch(/position:\s*absolute/);
     });
 
     test('should have timeline-dot styles', () => {
-      expect(cssContent).toMatch(/\.timeline-dot\s*\{/i);
+      expect(cssContent).toMatch(/\.timeline-dot\s*{[^}]*border-radius:\s*50%/);
     });
 
-    test('should have timeline-content styles', () => {
-      expect(cssContent).toMatch(/\.timeline-content\s*\{/i);
-    });
-  });
-
-  describe('Project Cards', () => {
-    test('should have projects-grid styles', () => {
-      expect(cssContent).toMatch(/\.projects-grid\s*\{/i);
+    test('should position timeline-dot absolutely', () => {
+      expect(cssContent).toMatch(/\.timeline-dot\s*{[^}]*position:\s*absolute/);
     });
 
-    test('should have project-card styles', () => {
-      expect(cssContent).toMatch(/\.project-card\s*\{/i);
+    test('should have hover effect on timeline-content', () => {
+      expect(cssContent).toMatch(/\.timeline-content:hover/);
     });
 
-    test('should have project-image styles', () => {
-      expect(cssContent).toMatch(/\.project-image\s*\{/i);
-    });
-
-    test('should have project-overlay styles', () => {
-      expect(cssContent).toMatch(/\.project-overlay\s*\{/i);
-    });
-
-    test('should have hover effects on project cards', () => {
-      expect(cssContent).toMatch(/\.project-card:hover/i);
-    });
-
-    test('should have project-tags styles', () => {
-      expect(cssContent).toMatch(/\.project-tags\s*\{/i);
-    });
-
-    test('should have box-shadow on cards', () => {
-      expect(cssContent).toMatch(/box-shadow:/i);
+    test('should use translateX in timeline hover', () => {
+      const hoverMatch = cssContent.match(/\.timeline-content:hover\s*{([^}]*)}/);
+      expect(hoverMatch).toBeTruthy();
+      expect(hoverMatch[1]).toMatch(/transform:\s*translateX/);
     });
   });
 
-  describe('Education Section', () => {
-    test('should have education-grid styles', () => {
-      expect(cssContent).toMatch(/\.education-grid\s*\{/i);
+  describe('Education Styles', () => {
+    test('should use grid for education layout', () => {
+      expect(cssContent).toMatch(/\.education-grid\s*{[^}]*display:\s*grid/);
     });
 
-    test('should have education-card styles', () => {
-      expect(cssContent).toMatch(/\.education-card\s*\{/i);
+    test('should have education-card hover effect', () => {
+      expect(cssContent).toMatch(/\.education-card:hover/);
     });
 
-    test('should have education-icon styles', () => {
-      expect(cssContent).toMatch(/\.education-icon\s*\{/i);
+    test('should have circular education-icon', () => {
+      expect(cssContent).toMatch(/\.education-icon\s*{[^}]*border-radius:\s*50%/);
+    });
+
+    test('should use gradient for education-icon background', () => {
+      expect(cssContent).toMatch(/\.education-icon\s*{[^}]*background:\s*linear-gradient/);
+    });
+
+    test('should center icon content with flexbox', () => {
+      expect(cssContent).toMatch(/\.education-icon\s*{[^}]*display:\s*flex/);
+      expect(cssContent).toMatch(/\.education-icon\s*{[^}]*align-items:\s*center/);
     });
   });
 
-  describe('Contact Section', () => {
-    test('should have contact-content styles', () => {
-      expect(cssContent).toMatch(/\.contact-content\s*\{/i);
+  describe('Projects Section Styles', () => {
+    test('should use grid for projects layout', () => {
+      expect(cssContent).toMatch(/\.projects-grid\s*{[^}]*display:\s*grid/);
     });
 
-    test('should have contact-form styles', () => {
-      expect(cssContent).toMatch(/\.contact-form\s*\{/i);
+    test('should have project-card hover effect', () => {
+      expect(cssContent).toMatch(/\.project-card:hover/);
     });
 
-    test('should have form-group styles', () => {
-      expect(cssContent).toMatch(/\.form-group\s*\{/i);
+    test('should have project-image with fixed height', () => {
+      expect(cssContent).toMatch(/\.project-image\s*{[^}]*height:/);
     });
 
-    test('should have input styles', () => {
-      expect(cssContent).toMatch(/input\[type="text"\]/i);
-      expect(cssContent).toMatch(/input\[type="email"\]/i);
+    test('should have object-fit cover for images', () => {
+      expect(cssContent).toMatch(/\.project-image\s+img\s*{[^}]*object-fit:\s*cover/);
     });
 
-    test('should have textarea styles', () => {
-      expect(cssContent).toMatch(/textarea\s*\{/i);
+    test('should scale image on card hover', () => {
+      expect(cssContent).toMatch(/\.project-card:hover\s+\.project-image\s+img\s*{[^}]*transform:\s*scale/);
     });
 
-    test('should have focus styles for inputs', () => {
-      expect(cssContent).toMatch(/:focus/i);
+    test('should have project-overlay with opacity 0 by default', () => {
+      expect(cssContent).toMatch(/\.project-overlay\s*{[^}]*opacity:\s*0/);
     });
 
-    test('should have contact-details styles', () => {
-      expect(cssContent).toMatch(/\.contact-details\s*\{/i);
+    test('should show overlay on hover', () => {
+      expect(cssContent).toMatch(/\.project-card:hover\s+\.project-overlay\s*{[^}]*opacity:\s*1/);
     });
 
-    test('should have contact-item styles', () => {
-      expect(cssContent).toMatch(/\.contact-item\s*\{/i);
+    test('should have circular project-link buttons', () => {
+      expect(cssContent).toMatch(/\.project-link\s*{[^}]*border-radius:\s*50%/);
+    });
+
+    test('should use flexbox for project-tags', () => {
+      expect(cssContent).toMatch(/\.project-tags\s*{[^}]*display:\s*flex/);
+    });
+  });
+
+  describe('Contact Section Styles', () => {
+    test('should use grid for contact-content', () => {
+      expect(cssContent).toMatch(/\.contact-content\s*{[^}]*display:\s*grid/);
+    });
+
+    test('should have two columns for contact grid', () => {
+      const gridMatch = cssContent.match(/\.contact-content\s*{[^}]*grid-template-columns:\s*1fr\s+1fr/);
+      expect(gridMatch).toBeTruthy();
+    });
+
+    test('should style contact-item with flexbox', () => {
+      expect(cssContent).toMatch(/\.contact-item\s*{[^}]*display:\s*flex/);
+    });
+
+    test('should have circular icons for contact items', () => {
+      expect(cssContent).toMatch(/\.contact-item\s+i\s*{[^}]*border-radius:\s*50%/);
+    });
+
+    test('should use gradient for contact icons', () => {
+      expect(cssContent).toMatch(/\.contact-item\s+i\s*{[^}]*background:\s*linear-gradient/);
+    });
+
+    test('should style form inputs consistently', () => {
+      expect(cssContent).toMatch(/\.form-group\s+input/);
+      expect(cssContent).toMatch(/\.form-group\s+textarea/);
+    });
+
+    test('should have focus state for form inputs', () => {
+      expect(cssContent).toMatch(/\.form-group\s+input:focus/);
+      expect(cssContent).toMatch(/\.form-group\s+textarea:focus/);
+    });
+
+    test('should remove default outline on focus', () => {
+      const focusMatch = cssContent.match(/\.form-group\s+input:focus[^}]*outline:\s*none/);
+      expect(focusMatch).toBeTruthy();
+    });
+
+    test('should change border color on focus', () => {
+      expect(cssContent).toMatch(/\.form-group\s+input:focus[^}]*border-color:/);
     });
   });
 
   describe('Footer Styles', () => {
-    test('should have footer styles', () => {
-      expect(cssContent).toMatch(/\.footer\s*\{/i);
+    test('should have footer background color', () => {
+      expect(cssContent).toMatch(/\.footer\s*{[^}]*background:/);
     });
 
-    test('should have footer-links styles', () => {
-      expect(cssContent).toMatch(/\.footer-links\s*\{/i);
-    });
-  });
-
-  describe('Animations and Transitions', () => {
-    test('should use transition property', () => {
-      expect(cssContent).toMatch(/transition:/i);
+    test('should center footer text', () => {
+      expect(cssContent).toMatch(/\.footer\s*{[^}]*text-align:\s*center/);
     });
 
-    test('should have keyframe animations', () => {
-      expect(cssContent).toMatch(/@keyframes/i);
+    test('should style footer links', () => {
+      expect(cssContent).toMatch(/\.footer-links\s+a/);
     });
 
-    test('should have transform property for animations', () => {
-      expect(cssContent).toMatch(/transform:/i);
-    });
-
-    test('should have opacity transitions', () => {
-      expect(cssContent).toMatch(/opacity:/i);
-    });
-
-    test('should have animation property', () => {
-      expect(cssContent).toMatch(/animation:/i);
-    });
-
-    test('should have scroll animation keyframes', () => {
-      const scrollKeyframes = cssContent.match(/@keyframes\s+scroll/i);
-      expect(scrollKeyframes).toBeTruthy();
-    });
-
-    test('should use translateY for animations', () => {
-      expect(cssContent).toMatch(/translateY/i);
-    });
-
-    test('should use translateX for animations', () => {
-      expect(cssContent).toMatch(/translateX/i);
-    });
-
-    test('should use scale for hover effects', () => {
-      expect(cssContent).toMatch(/scale/i);
+    test('should have footer link hover state', () => {
+      expect(cssContent).toMatch(/\.footer-links\s+a:hover/);
     });
   });
 
-  describe('Responsive Design - Media Queries', () => {
-    test('should have media queries for responsive design', () => {
-      expect(cssContent).toMatch(/@media/i);
+  describe('Animations', () => {
+    test('should have fadeIn keyframes', () => {
+      expect(cssContent).toMatch(/@keyframes\s+fadeIn/);
     });
 
-    test('should have mobile breakpoint', () => {
-      expect(cssContent).toMatch(/@media[^{]*\(max-width:\s*768px\)/i);
+    test('should have fade-in classes with delays', () => {
+      expect(cssContent).toMatch(/\.fade-in\s*{/);
+      expect(cssContent).toMatch(/\.fade-in-delay\s*{/);
+      expect(cssContent).toMatch(/\.fade-in-delay-2\s*{/);
+      expect(cssContent).toMatch(/\.fade-in-delay-3\s*{/);
     });
 
-    test('should have tablet/desktop breakpoints', () => {
-      const mediaQueries = cssContent.match(/@media[^{]*\([^)]+\)/gi);
-      expect(mediaQueries).toBeTruthy();
-      expect(mediaQueries.length).toBeGreaterThan(0);
+    test('should use animation property in fade classes', () => {
+      expect(cssContent).toMatch(/\.fade-in\s*{[^}]*animation:/);
     });
 
-    test('should adjust hamburger menu visibility in media queries', () => {
-      const mobileMedia = cssContent.match(/@media[^{]*\(max-width:\s*768px\)[^}]*\{[^}]*\.hamburger[^}]*display[^}]*\}/is);
+    test('should have scroll keyframes for scroll indicator', () => {
+      expect(cssContent).toMatch(/@keyframes\s+scroll/);
+    });
+
+    test('should use transform in animations for better performance', () => {
+      const fadeInMatch = cssContent.match(/@keyframes\s+fadeIn\s*{([^}]+from[^}]+to[^}]+)}/s);
+      expect(fadeInMatch).toBeTruthy();
+      expect(fadeInMatch[1]).toMatch(/transform:/);
+    });
+  });
+
+  describe('Responsive Design', () => {
+    test('should have media query for tablets (768px)', () => {
+      expect(cssContent).toMatch(/@media\s*\([^)]*max-width:\s*768px/);
+    });
+
+    test('should have media query for mobile (480px)', () => {
+      expect(cssContent).toMatch(/@media\s*\([^)]*max-width:\s*480px/);
+    });
+
+    test('should show hamburger on mobile', () => {
+      const mobileMedia = cssContent.match(/@media\s*\([^)]*max-width:\s*768px[^)]*\)\s*{([^}]+\.hamburger[^}]+)}/s);
       expect(mobileMedia).toBeTruthy();
     });
 
-    test('should adjust navigation for mobile', () => {
-      expect(cssContent).toMatch(/\.nav-links\.active/i);
+    test('should adjust nav-links for mobile', () => {
+      const mobileMedia = cssContent.match(/@media\s*\([^)]*max-width:\s*768px[^)]*\)\s*{([\s\S]*?)}/);
+      expect(mobileMedia).toBeTruthy();
+      expect(mobileMedia[1]).toMatch(/\.nav-links/);
+    });
+
+    test('should reduce hero heading size on mobile', () => {
+      const mobileMedia = cssContent.match(/@media\s*\([^)]*max-width:\s*768px[^)]*\)\s*{([\s\S]*?)}/);
+      expect(mobileMedia).toBeTruthy();
+      expect(mobileMedia[1]).toMatch(/\.hero\s+h1/);
+    });
+
+    test('should adjust grid columns for mobile', () => {
+      const mobileMedia = cssContent.match(/@media\s*\([^)]*max-width:\s*768px[^)]*\)\s*{([\s\S]*?)}/);
+      expect(mobileMedia).toBeTruthy();
+      expect(mobileMedia[1]).toMatch(/grid-template-columns:\s*1fr/);
+    });
+
+    test('should use auto-fit for responsive grids', () => {
+      expect(cssContent).toMatch(/grid-template-columns:\s*repeat\(auto-fit/);
+    });
+
+    test('should have minmax for flexible grid items', () => {
+      expect(cssContent).toMatch(/minmax\(/);
     });
   });
 
-  describe('Flexbox Usage', () => {
-    test('should use flexbox display', () => {
-      expect(cssContent).toMatch(/display:\s*flex/i);
+  describe('Best Practices', () => {
+    test('should use transitions for smooth effects', () => {
+      const transitions = cssContent.match(/transition:/gi);
+      expect(transitions).toBeTruthy();
+      expect(transitions.length).toBeGreaterThan(10);
     });
 
-    test('should use flex-direction', () => {
-      expect(cssContent).toMatch(/flex-direction:/i);
+    test('should use box-shadow for depth', () => {
+      const shadows = cssContent.match(/box-shadow:/gi);
+      expect(shadows).toBeTruthy();
+      expect(shadows.length).toBeGreaterThan(5);
     });
 
-    test('should use justify-content', () => {
-      expect(cssContent).toMatch(/justify-content:/i);
+    test('should use transform for hover effects', () => {
+      const transforms = cssContent.match(/transform:/gi);
+      expect(transforms).toBeTruthy();
+      expect(transforms.length).toBeGreaterThan(5);
     });
 
-    test('should use align-items', () => {
-      expect(cssContent).toMatch(/align-items:/i);
-    });
-
-    test('should use gap property for flex layouts', () => {
-      expect(cssContent).toMatch(/gap:/i);
-    });
-  });
-
-  describe('Grid Usage', () => {
-    test('should use CSS grid', () => {
-      expect(cssContent).toMatch(/display:\s*grid/i);
-    });
-
-    test('should use grid-template-columns', () => {
-      expect(cssContent).toMatch(/grid-template-columns:/i);
-    });
-
-    test('should use gap in grid layouts', () => {
-      const gridMatches = cssContent.match(/display:\s*grid[^}]*gap:/is);
-      expect(gridMatches).toBeTruthy();
-    });
-  });
-
-  describe('Typography', () => {
-    test('should define font sizes', () => {
-      expect(cssContent).toMatch(/font-size:/i);
-    });
-
-    test('should define font weights', () => {
-      expect(cssContent).toMatch(/font-weight:/i);
-    });
-
-    test('should have text-align properties', () => {
-      expect(cssContent).toMatch(/text-align:/i);
-    });
-
-    test('should have letter-spacing for headings', () => {
-      expect(cssContent).toMatch(/letter-spacing:/i);
-    });
-
-    test('should use rem or em units for scalability', () => {
-      expect(cssContent).toMatch(/\d+(\.\d+)?(rem|em)/i);
-    });
-  });
-
-  describe('Colors and Gradients', () => {
-    test('should use gradient backgrounds', () => {
-      expect(cssContent).toMatch(/linear-gradient\s*\(/i);
-    });
-
-    test('should use rgba for transparency', () => {
-      expect(cssContent).toMatch(/rgba\s*\(/i);
-    });
-
-    test('should have consistent color scheme', () => {
-      const varUsage = cssContent.match(/var\(--[a-z-]*color[a-z-]*\)/gi);
-      expect(varUsage).toBeTruthy();
-      expect(varUsage.length).toBeGreaterThan(10);
-    });
-
-    test('should use background-clip for gradient text', () => {
-      expect(cssContent).toMatch(/background-clip:\s*text/i);
-      expect(cssContent).toMatch(/-webkit-background-clip:\s*text/i);
-    });
-
-    test('should use -webkit-text-fill-color for gradient text', () => {
-      expect(cssContent).toMatch(/-webkit-text-fill-color:/i);
-    });
-  });
-
-  describe('Shadows and Depth', () => {
-    test('should use box-shadow', () => {
-      expect(cssContent).toMatch(/box-shadow:/i);
-    });
-
-    test('should have different shadow intensities', () => {
-      expect(cssContent).toMatch(/--shadow:/i);
-      expect(cssContent).toMatch(/--shadow-hover:/i);
-    });
-  });
-
-  describe('Positioning', () => {
-    test('should use position: fixed for navbar', () => {
-      expect(cssContent).toMatch(/position:\s*fixed/i);
-    });
-
-    test('should use position: relative', () => {
-      expect(cssContent).toMatch(/position:\s*relative/i);
-    });
-
-    test('should use position: absolute for overlays', () => {
-      expect(cssContent).toMatch(/position:\s*absolute/i);
-    });
-
-    test('should use top, right, bottom, left properties', () => {
-      expect(cssContent).toMatch(/\b(top|right|bottom|left):/i);
-    });
-  });
-
-  describe('Border and Border-Radius', () => {
-    test('should use border-radius for rounded corners', () => {
-      expect(cssContent).toMatch(/border-radius:/i);
-    });
-
-    test('should have border properties', () => {
-      expect(cssContent).toMatch(/border:/i);
-    });
-
-    test('should use border for circular elements', () => {
-      const circularElements = cssContent.match(/border-radius:\s*50%/gi);
-      expect(circularElements).toBeTruthy();
-    });
-  });
-
-  describe('Overflow Handling', () => {
-    test('should handle overflow on body', () => {
-      expect(cssContent).toMatch(/overflow(-x)?:\s*hidden/i);
-    });
-
-    test('should have overflow properties where needed', () => {
-      expect(cssContent).toMatch(/overflow:/i);
-    });
-  });
-
-  describe('Social Links Styling', () => {
-    test('should have social-links styles', () => {
-      expect(cssContent).toMatch(/\.social-links\s*\{/i);
-    });
-
-    test('should have hover effects on social links', () => {
-      expect(cssContent).toMatch(/\.social-links\s+a:hover/i);
-    });
-  });
-
-  describe('CSS Best Practices', () => {
-    test('should not have !important (discouraged)', () => {
-      const importantCount = (cssContent.match(/!important/gi) || []).length;
-      expect(importantCount).toBeLessThan(5);
-    });
-
-    test('should use lowercase for property names', () => {
-      const uppercaseProps = cssContent.match(/[A-Z][\w-]*:/g);
-      expect(uppercaseProps).toBeFalsy();
-    });
-
-    test('should have consistent spacing', () => {
-      // Check for space after colons
-      const propsWithoutSpace = cssContent.match(/:[^\s]/g);
-      if (propsWithoutSpace) {
-        expect(propsWithoutSpace.length).toBeLessThan(10);
+    test('should avoid using !important excessively', () => {
+      const importantUsage = cssContent.match(/!important/gi);
+      if (importantUsage) {
+        expect(importantUsage.length).toBeLessThan(3);
       }
     });
 
-    test('should end declarations with semicolons', () => {
-      // Most declarations should end with semicolons
-      const declarations = cssContent.match(/[a-z-]+:\s*[^;{}]+;/gi);
+    test('should use relative units (rem, em, %) appropriately', () => {
+      expect(cssContent).toMatch(/\d+rem/);
+      expect(cssContent).toMatch(/\d+%/);
+    });
+
+    test('should group related selectors', () => {
+      // Check for comma-separated selectors
+      const groupedSelectors = cssContent.match(/[^{]+,[^{]+{/g);
+      expect(groupedSelectors).toBeTruthy();
+    });
+  });
+
+  describe('Color Consistency', () => {
+    test('should use CSS variables for colors', () => {
+      const colorVarUsage = cssContent.match(/var\(--[a-z-]*color[a-z-]*\)/gi);
+      expect(colorVarUsage).toBeTruthy();
+      expect(colorVarUsage.length).toBeGreaterThan(10);
+    });
+
+    test('should use linear-gradient consistently', () => {
+      const gradients = cssContent.match(/linear-gradient\([^)]+var\(--primary-color\)[^)]+var\(--secondary-color\)/gi);
+      expect(gradients).toBeTruthy();
+      expect(gradients.length).toBeGreaterThan(3);
+    });
+
+    test('should use rgba for transparency', () => {
+      expect(cssContent).toMatch(/rgba\(\d+,\s*\d+,\s*\d+,\s*[\d.]+\)/);
+    });
+  });
+
+  describe('Accessibility', () => {
+    test('should have focus states for interactive elements', () => {
+      expect(cssContent).toMatch(/:focus/);
+    });
+
+    test('should maintain sufficient contrast', () => {
+      // Check that text has color defined
+      expect(cssContent).toMatch(/color:\s*(var\(--text-dark\)|var\(--text-light\)|#[0-9a-f]{3,6})/i);
+    });
+
+    test('should not remove outline without replacement', () => {
+      const outlineNone = cssContent.match(/outline:\s*none/gi);
+      const focusStates = cssContent.match(/:focus/gi);
+      
+      if (outlineNone) {
+        // Should have alternative focus indicators
+        expect(focusStates).toBeTruthy();
+      }
+    });
+  });
+
+  describe('Performance', () => {
+    test('should use transform for animations instead of position', () => {
+      const animations = cssContent.match(/@keyframes[^{]+{[^}]*}/gs);
+      if (animations) {
+        animations.forEach(animation => {
+          if (animation.includes('translateY') || animation.includes('translateX')) {
+            expect(animation).toMatch(/transform:/);
+          }
+        });
+      }
+    });
+
+    test('should minimize use of expensive properties', () => {
+      // Check that filter and backdrop-filter are used sparingly
+      const expensiveProps = cssContent.match(/filter:|backdrop-filter:/gi);
+      if (expensiveProps) {
+        expect(expensiveProps.length).toBeLessThan(5);
+      }
+    });
+
+    test('should use will-change sparingly if at all', () => {
+      const willChange = cssContent.match(/will-change:/gi);
+      if (willChange) {
+        expect(willChange.length).toBeLessThan(3);
+      }
+    });
+  });
+
+  describe('CSS Syntax Validation', () => {
+    test('should have balanced curly braces', () => {
+      const openBraces = (cssContent.match(/{/g) || []).length;
+      const closeBraces = (cssContent.match(/}/g) || []).length;
+      expect(openBraces).toBe(closeBraces);
+    });
+
+    test('should have semicolons at end of declarations', () => {
+      // Check major declarations have semicolons
+      const declarations = cssContent.match(/:\s*[^;{}]+;/g);
       expect(declarations).toBeTruthy();
       expect(declarations.length).toBeGreaterThan(100);
     });
 
-    test('should use shorthand properties where appropriate', () => {
-      expect(cssContent).toMatch(/margin:\s*\d+/i);
-      expect(cssContent).toMatch(/padding:\s*\d+/i);
+    test('should not have syntax errors in selectors', () => {
+      // Basic check for common syntax errors
+      expect(cssContent).not.toMatch(/,,/); // Double commas
+      expect(cssContent).not.toMatch(/;{/); // Semicolon before brace
     });
 
-    test('should group related properties', () => {
-      // Check that display/flex properties are typically together
-      const flexGroups = cssContent.match(/display:\s*flex[^}]*justify-content:/is);
-      expect(flexGroups).toBeTruthy();
-    });
-  });
-
-  describe('Performance Optimizations', () => {
-    test('should use will-change for animated elements', () => {
-      // Optional but recommended
-      const willChange = cssContent.match(/will-change:/i);
-      // This is optional, so we just check if it exists without failing
-      if (willChange) {
-        expect(willChange).toBeTruthy();
-      }
-    });
-
-    test('should minimize use of * selector', () => {
-      const universalSelectors = cssContent.match(/\*\s*\{/g);
-      expect(universalSelectors.length).toBeLessThan(3);
+    test('should use consistent spacing', () => {
+      // Check for space after colon in declarations
+      const colonSpacing = cssContent.match(/:\s+/g);
+      expect(colonSpacing).toBeTruthy();
+      expect(colonSpacing.length).toBeGreaterThan(100);
     });
   });
 
-  describe('Accessibility in CSS', () => {
-    test('should have focus styles', () => {
-      expect(cssContent).toMatch(/:focus/i);
+  describe('Layout Techniques', () => {
+    test('should use Flexbox where appropriate', () => {
+      const flexUsage = cssContent.match(/display:\s*flex/gi);
+      expect(flexUsage).toBeTruthy();
+      expect(flexUsage.length).toBeGreaterThan(10);
     });
 
-    test('should have visible focus indicators', () => {
-      const focusStyles = cssContent.match(/:focus[^}]*\{[^}]*\}/is);
-      expect(focusStyles).toBeTruthy();
+    test('should use CSS Grid where appropriate', () => {
+      const gridUsage = cssContent.match(/display:\s*grid/gi);
+      expect(gridUsage).toBeTruthy();
+      expect(gridUsage.length).toBeGreaterThan(5);
     });
 
-    test('should have sufficient contrast (check for very light colors on white)', () => {
-      // This is a basic check - real contrast checking requires calculation
-      const whiteOnWhite = cssContent.match(/background:\s*#fff[^}]*color:\s*#fff/is);
-      expect(whiteOnWhite).toBeFalsy();
-    });
-  });
-
-  describe('Vendor Prefixes', () => {
-    test('should have webkit prefixes for background-clip', () => {
-      expect(cssContent).toMatch(/-webkit-background-clip:/i);
+    test('should use position:fixed for navbar', () => {
+      expect(cssContent).toMatch(/\.navbar\s*{[^}]*position:\s*fixed/);
     });
 
-    test('should have webkit prefixes for text-fill-color', () => {
-      expect(cssContent).toMatch(/-webkit-text-fill-color:/i);
+    test('should use position:absolute for overlays', () => {
+      expect(cssContent).toMatch(/position:\s*absolute/i);
     });
   });
 
-  describe('CSS Structure and Organization', () => {
-    test('should have CSS custom properties defined first', () => {
-      const rootIndex = cssContent.indexOf(':root');
-      const firstClassIndex = cssContent.indexOf('.');
-      expect(rootIndex).toBeLessThan(firstClassIndex);
-    });
-
-    test('should have reset styles near the beginning', () => {
-      const resetIndex = cssContent.indexOf('* {');
-      const midpoint = cssContent.length / 2;
-      expect(resetIndex).toBeLessThan(midpoint);
-    });
-
-    test('should group related selectors', () => {
-      // Check that related classes are near each other
-      const navbarIndex = cssContent.indexOf('.navbar');
-      const navLinksIndex = cssContent.indexOf('.nav-links');
-      const distance = Math.abs(navLinksIndex - navbarIndex);
-      expect(distance).toBeLessThan(2000);
-    });
-
-    test('should use meaningful class names', () => {
-      expect(cssContent).toMatch(/\.hero/i);
-      expect(cssContent).toMatch(/\.section/i);
-      expect(cssContent).toMatch(/\.container/i);
-      expect(cssContent).toMatch(/\.footer/i);
-    });
-  });
-
-  describe('Specific Component Styles', () => {
-    test('should have CTA button styles', () => {
-      expect(cssContent).toMatch(/\.cta-buttons\s*\{/i);
-    });
-
-    test('should have highlight class for emphasis', () => {
-      expect(cssContent).toMatch(/\.highlight\s*\{/i);
-    });
-
-    test('should have fade-in animation classes', () => {
-      expect(cssContent).toMatch(/\.fade-in/i);
-    });
-
-    test('should have project-link styles', () => {
-      expect(cssContent).toMatch(/\.project-link\s*\{/i);
-    });
-
-    test('should have skill-info styles', () => {
-      expect(cssContent).toMatch(/\.skill-info\s*\{/i);
-    });
-  });
-
-  describe('Interactive Elements', () => {
-    test('should change cursor to pointer on clickable elements', () => {
-      const cursorPointers = cssContent.match(/cursor:\s*pointer/gi);
-      expect(cursorPointers).toBeTruthy();
-      expect(cursorPointers.length).toBeGreaterThan(3);
-    });
-
-    test('should have transition on interactive elements', () => {
-      expect(cssContent).toMatch(/\.btn[^}]*transition:/is);
-      expect(cssContent).toMatch(/\.nav-links\s+a[^}]*transition:/is);
-    });
-
+  describe('Hover and Interactive States', () => {
     test('should have hover states for links', () => {
-      expect(cssContent).toMatch(/a:hover/i);
-    });
-  });
-
-  describe('CSS Units Usage', () => {
-    test('should use px for borders and small values', () => {
-      expect(cssContent).toMatch(/\d+px/);
+      const hoverStates = cssContent.match(/:hover/gi);
+      expect(hoverStates).toBeTruthy();
+      expect(hoverStates.length).toBeGreaterThan(10);
     });
 
-    test('should use rem or em for font sizes', () => {
-      expect(cssContent).toMatch(/font-size:\s*\d+(\.\d+)?(rem|em)/i);
+    test('should have active states where appropriate', () => {
+      expect(cssContent).toMatch(/\.active/);
     });
 
-    test('should use percentages for widths', () => {
-      expect(cssContent).toMatch(/width:\s*\d+%/i);
+    test('should use cursor:pointer for clickable elements', () => {
+      expect(cssContent).toMatch(/cursor:\s*pointer/i);
     });
 
-    test('should use viewport units', () => {
-      expect(cssContent).toMatch(/\d+(vh|vw)/i);
+    test('should have smooth transitions on hover', () => {
+      const hoverBlocks = cssContent.match(/:hover\s*{([^}]*)}/g);
+      if (hoverBlocks) {
+        // Most hover blocks should reference transition
+        const transitionsCount = cssContent.match(/transition:/gi).length;
+        expect(transitionsCount).toBeGreaterThan(5);
+      }
     });
   });
 });
