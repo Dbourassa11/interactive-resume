@@ -1,60 +1,39 @@
 // Setup file for Jest tests
-// This file runs before each test file
+require('@testing-library/jest-dom');
 
-// Mock console methods to reduce noise in test output
-global.console = {
-  ...console,
-  log: jest.fn(),
-  debug: jest.fn(),
-  info: jest.fn(),
-  warn: jest.fn(),
-  error: jest.fn(),
-};
+// Mock window.scrollTo
+global.scrollTo = jest.fn();
 
-// Mock requestAnimationFrame for tests
-global.requestAnimationFrame = (cb) => {
-  return setTimeout(cb, 0);
-};
-
-// Mock cancelAnimationFrame
-global.cancelAnimationFrame = (id) => {
-  clearTimeout(id);
-};
+// Mock window.requestAnimationFrame
+global.requestAnimationFrame = jest.fn((callback) => {
+  callback();
+  return 1;
+});
 
 // Mock IntersectionObserver
 global.IntersectionObserver = class IntersectionObserver {
   constructor(callback, options) {
     this.callback = callback;
     this.options = options;
-    this.observedElements = [];
   }
 
-  observe(element) {
-    this.observedElements.push(element);
-    // Immediately trigger callback for testing
+  observe(target) {
+    // Simulate immediate intersection
     this.callback([{
-      target: element,
+      target,
       isIntersecting: true,
       intersectionRatio: 1
     }], this);
   }
 
-  unobserve(element) {
-    this.observedElements = this.observedElements.filter(el => el !== element);
-  }
-
-  disconnect() {
-    this.observedElements = [];
-  }
+  unobserve() {}
+  disconnect() {}
 };
 
-// Setup DOM helper
-global.createDOM = (htmlString) => {
-  document.body.innerHTML = htmlString;
-};
+// Mock setTimeout and clearTimeout for better test control
+jest.useFakeTimers();
 
-// Cleanup helper
-afterEach(() => {
-  document.body.innerHTML = '';
+// Reset mocks before each test
+beforeEach(() => {
   jest.clearAllMocks();
 });

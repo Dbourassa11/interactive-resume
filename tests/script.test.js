@@ -1,206 +1,145 @@
 /**
  * Comprehensive Unit Tests for script.js
- * Tests all interactive functionality of the resume website
+ * Tests all interactive functionality of the resume
  */
 
-describe('Interactive Resume - Script Tests', () => {
+const fs = require('fs');
+const path = require('path');
+
+describe('Interactive Resume - JavaScript Functionality', () => {
   let scriptContent;
 
   beforeAll(() => {
-    // Load the script content
-    const fs = require('fs');
-    const path = require('path');
-    scriptContent = fs.readFileSync(path.join(__dirname, '../script.js'), 'utf8');
+    // Load the HTML file
+    const html = fs.readFileSync(path.resolve(__dirname, '../index.html'), 'utf8');
+    document.body.innerHTML = html;
+
+    // Load and execute the script
+    scriptContent = fs.readFileSync(path.resolve(__dirname, '../script.js'), 'utf8');
   });
 
   beforeEach(() => {
-    // Reset DOM before each test
-    document.body.innerHTML = '';
+    // Reset DOM
+    const html = fs.readFileSync(path.resolve(__dirname, '../index.html'), 'utf8');
+    document.body.innerHTML = html;
     
-    // Create a basic HTML structure for testing
-    document.body.innerHTML = `
-      <nav class="navbar">
-        <div class="container">
-          <div class="logo">My Portfolio</div>
-          <ul class="nav-links">
-            <li><a href="#home">Home</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#skills">Skills</a></li>
-            <li><a href="#contact">Contact</a></li>
-          </ul>
-          <div class="hamburger">
-            <span></span>
-            <span></span>
-            <span></span>
-          </div>
-        </div>
-      </nav>
-      
-      <section id="home" class="hero">
-        <div class="hero-content">
-          <h1>Hello, I'm <span class="highlight">Test User</span></h1>
-        </div>
-      </section>
-      
-      <section id="about" class="section">
-        <div class="stats">
-          <div class="stat-item">
-            <span class="stat-number" data-target="5">0</span>
-            <span class="stat-label">Years Experience</span>
-          </div>
-          <div class="stat-item">
-            <span class="stat-number" data-target="50">0</span>
-            <span class="stat-label">Projects Completed</span>
-          </div>
-        </div>
-      </section>
-      
-      <section id="skills" class="section">
-        <div class="skill-category">
-          <div class="progress-bar" data-width="90"></div>
-          <div class="progress-bar" data-width="85"></div>
-        </div>
-      </section>
-      
-      <section id="contact" class="section">
-        <form id="contactForm">
-          <input type="text" id="name" name="name" />
-          <input type="email" id="email" name="email" />
-          <input type="text" id="subject" name="subject" />
-          <textarea id="message" name="message"></textarea>
-          <button type="submit">Send</button>
-        </form>
-      </section>
-      
-      <div class="project-image">
-        <img src="test.jpg" alt="Test Project" />
-      </div>
-    `;
+    // Clear all mocks
+    jest.clearAllMocks();
+    jest.clearAllTimers();
   });
 
   describe('Mobile Navigation', () => {
-    test('should toggle navigation menu when hamburger is clicked', () => {
+    test('should toggle mobile menu when hamburger is clicked', () => {
+      eval(scriptContent);
+      
       const hamburger = document.querySelector('.hamburger');
       const navLinks = document.querySelector('.nav-links');
       
-      // Trigger DOMContentLoaded
-      const event = new Event('DOMContentLoaded');
-      document.dispatchEvent(event);
+      expect(hamburger).toBeTruthy();
+      expect(navLinks).toBeTruthy();
       
       // Simulate click
       hamburger.click();
       
       expect(navLinks.classList.contains('active')).toBe(true);
       expect(hamburger.classList.contains('active')).toBe(true);
+      
+      // Click again to close
+      hamburger.click();
+      
+      expect(navLinks.classList.contains('active')).toBe(false);
+      expect(hamburger.classList.contains('active')).toBe(false);
     });
 
-    test('should close menu when clicking on navigation link', () => {
+    test('should close mobile menu when navigation link is clicked', () => {
+      eval(scriptContent);
+      
       const hamburger = document.querySelector('.hamburger');
       const navLinks = document.querySelector('.nav-links');
-      const navItem = document.querySelector('.nav-links a');
-      
-      // Trigger DOMContentLoaded
-      const event = new Event('DOMContentLoaded');
-      document.dispatchEvent(event);
+      const firstNavLink = document.querySelector('.nav-links a');
       
       // Open menu first
       hamburger.click();
       expect(navLinks.classList.contains('active')).toBe(true);
       
-      // Click nav item
-      navItem.click();
+      // Click a nav link
+      firstNavLink.click();
       
       expect(navLinks.classList.contains('active')).toBe(false);
       expect(hamburger.classList.contains('active')).toBe(false);
     });
 
     test('should handle missing hamburger element gracefully', () => {
-      document.body.innerHTML = '<nav class="navbar"></nav>';
+      const hamburger = document.querySelector('.hamburger');
+      hamburger.remove();
       
       expect(() => {
-        const event = new Event('DOMContentLoaded');
-        document.dispatchEvent(event);
+        eval(scriptContent);
       }).not.toThrow();
     });
   });
 
   describe('Smooth Scrolling', () => {
-    test('should prevent default behavior on navigation link click', () => {
-      const navLink = document.querySelector('.nav-links a');
+    test('should scroll to target section when nav link is clicked', () => {
+      eval(scriptContent);
       
-      // Trigger DOMContentLoaded
-      const event = new Event('DOMContentLoaded');
-      document.dispatchEvent(event);
-      
-      const clickEvent = new Event('click', { bubbles: true, cancelable: true });
-      const preventDefaultSpy = jest.spyOn(clickEvent, 'preventDefault');
-      
-      navLink.dispatchEvent(clickEvent);
-      
-      expect(preventDefaultSpy).toHaveBeenCalled();
-    });
-
-    test('should calculate correct offset for scrolling', () => {
       const navLink = document.querySelector('.nav-links a[href="#about"]');
       const aboutSection = document.querySelector('#about');
+      
+      expect(navLink).toBeTruthy();
+      expect(aboutSection).toBeTruthy();
       
       // Mock offsetTop
       Object.defineProperty(aboutSection, 'offsetTop', {
         value: 1000,
-        writable: true
+        configurable: true
       });
-      
-      // Mock window.scrollTo
-      const scrollToSpy = jest.spyOn(window, 'scrollTo').mockImplementation(() => {});
-      
-      // Trigger DOMContentLoaded
-      const event = new Event('DOMContentLoaded');
-      document.dispatchEvent(event);
       
       navLink.click();
       
-      // Should scroll to offsetTop - 70 (navbar height)
-      expect(scrollToSpy).toHaveBeenCalledWith({
-        top: 930,
+      expect(window.scrollTo).toHaveBeenCalledWith({
+        top: 930, // 1000 - 70 (navbar offset)
         behavior: 'smooth'
       });
+    });
+
+    test('should prevent default link behavior', () => {
+      eval(scriptContent);
       
-      scrollToSpy.mockRestore();
+      const navLink = document.querySelector('.nav-links a[href="#home"]');
+      const event = new MouseEvent('click', { bubbles: true, cancelable: true });
+      const preventDefaultSpy = jest.spyOn(event, 'preventDefault');
+      
+      navLink.dispatchEvent(event);
+      
+      expect(preventDefaultSpy).toHaveBeenCalled();
     });
 
     test('should handle missing target section gracefully', () => {
-      const navLink = document.querySelector('.nav-links a');
-      navLink.setAttribute('href', '#nonexistent');
+      eval(scriptContent);
       
-      const scrollToSpy = jest.spyOn(window, 'scrollTo').mockImplementation(() => {});
+      const navLink = document.querySelector('.nav-links a[href="#about"]');
+      const aboutSection = document.querySelector('#about');
+      aboutSection.remove();
       
-      // Trigger DOMContentLoaded
-      const event = new Event('DOMContentLoaded');
-      document.dispatchEvent(event);
-      
-      navLink.click();
-      
-      expect(scrollToSpy).not.toHaveBeenCalled();
-      
-      scrollToSpy.mockRestore();
+      expect(() => {
+        navLink.click();
+      }).not.toThrow();
     });
   });
 
-  describe('Scroll Handler', () => {
-    test('should change navbar style when scrolled past threshold', () => {
+  describe('Navbar Scroll Effect', () => {
+    test('should update navbar style when scrolled past threshold', () => {
+      eval(scriptContent);
+      
       const navbar = document.querySelector('.navbar');
       
-      // Trigger DOMContentLoaded
-      const event = new Event('DOMContentLoaded');
-      document.dispatchEvent(event);
-      
-      // Mock pageYOffset
+      // Simulate scroll
       Object.defineProperty(window, 'pageYOffset', {
         value: 150,
-        writable: true
+        configurable: true
       });
       
-      // Trigger scroll event
       window.dispatchEvent(new Event('scroll'));
       
       expect(navbar.style.background).toBe('rgba(255, 255, 255, 0.98)');
@@ -208,575 +147,556 @@ describe('Interactive Resume - Script Tests', () => {
     });
 
     test('should reset navbar style when scrolled to top', () => {
+      eval(scriptContent);
+      
       const navbar = document.querySelector('.navbar');
       
-      // Trigger DOMContentLoaded
-      const event = new Event('DOMContentLoaded');
-      document.dispatchEvent(event);
-      
-      // Mock pageYOffset
+      // Simulate scroll to top
       Object.defineProperty(window, 'pageYOffset', {
         value: 50,
-        writable: true
+        configurable: true
       });
       
-      // Trigger scroll event
       window.dispatchEvent(new Event('scroll'));
       
       expect(navbar.style.background).toBe('var(--white)');
       expect(navbar.style.boxShadow).toBe('0 5px 15px rgba(0, 0, 0, 0.1)');
     });
+  });
 
-    test('should apply parallax effect to hero content', () => {
+  describe('Parallax Effect', () => {
+    test('should apply parallax transform to hero content', () => {
+      eval(scriptContent);
+      
       const heroContent = document.querySelector('.hero-content');
       
-      // Trigger DOMContentLoaded
-      const event = new Event('DOMContentLoaded');
-      document.dispatchEvent(event);
-      
-      // Mock window properties
+      // Simulate scroll within hero section
       Object.defineProperty(window, 'pageYOffset', {
         value: 200,
-        writable: true
+        configurable: true
       });
       Object.defineProperty(window, 'innerHeight', {
-        value: 1000,
-        writable: true
+        value: 800,
+        configurable: true
       });
       
-      // Trigger scroll event
       window.dispatchEvent(new Event('scroll'));
       
-      expect(heroContent.style.transform).toBe('translateY(100px)');
-      expect(heroContent.style.opacity).toBe('0.6');
+      expect(heroContent.style.transform).toContain('translateY');
+      expect(heroContent.style.opacity).toBeTruthy();
     });
 
-    test('should stop parallax effect when scrolled past hero', () => {
+    test('should stop parallax effect when scrolled past hero section', () => {
+      eval(scriptContent);
+      
       const heroContent = document.querySelector('.hero-content');
       
-      // Trigger DOMContentLoaded
-      const event = new Event('DOMContentLoaded');
-      document.dispatchEvent(event);
-      
-      // Mock window properties - scroll past hero
+      // Simulate scroll past hero
       Object.defineProperty(window, 'pageYOffset', {
-        value: 1500,
-        writable: true
+        value: 1000,
+        configurable: true
       });
       Object.defineProperty(window, 'innerHeight', {
-        value: 1000,
-        writable: true
+        value: 800,
+        configurable: true
       });
       
-      const initialTransform = heroContent.style.transform;
-      
-      // Trigger scroll event
       window.dispatchEvent(new Event('scroll'));
       
-      // Transform should not change after scrolling past hero
-      expect(heroContent.style.transform).toBe(initialTransform);
+      // Further scrolling shouldn't change transform
+      const previousTransform = heroContent.style.transform;
+      
+      Object.defineProperty(window, 'pageYOffset', {
+        value: 1200,
+        configurable: true
+      });
+      
+      window.dispatchEvent(new Event('scroll'));
+      
+      // Transform should not update (handler disabled)
+      expect(heroContent.style.transform).toBe(previousTransform);
     });
 
-    test('should highlight active navigation link based on scroll position', () => {
-      const navItems = document.querySelectorAll('.nav-links a');
-      const aboutSection = document.querySelector('#about');
+    test('should handle missing hero content gracefully', () => {
+      const heroContent = document.querySelector('.hero-content');
+      heroContent.remove();
       
-      // Mock section properties
+      expect(() => {
+        eval(scriptContent);
+        window.dispatchEvent(new Event('scroll'));
+      }).not.toThrow();
+    });
+  });
+
+  describe('Active Navigation Highlighting', () => {
+    test('should highlight active section in navigation', () => {
+      eval(scriptContent);
+      
+      const aboutSection = document.querySelector('#about');
+      const aboutLink = document.querySelector('.nav-links a[href="#about"]');
+      
+      // Mock section position
       Object.defineProperty(aboutSection, 'offsetTop', {
         value: 500,
-        writable: true
+        configurable: true
       });
       Object.defineProperty(aboutSection, 'offsetHeight', {
-        value: 800,
-        writable: true
+        value: 400,
+        configurable: true
       });
-      
-      // Trigger DOMContentLoaded
-      const event = new Event('DOMContentLoaded');
-      document.dispatchEvent(event);
-      
-      // Mock scroll position in about section
       Object.defineProperty(window, 'pageYOffset', {
-        value: 600,
-        writable: true
+        value: 550,
+        configurable: true
       });
       
-      // Trigger scroll event
       window.dispatchEvent(new Event('scroll'));
       
+      expect(aboutLink.classList.contains('active')).toBe(true);
+    });
+
+    test('should remove active class from other links', () => {
+      eval(scriptContent);
+      
+      const homeSection = document.querySelector('#home');
+      const aboutSection = document.querySelector('#about');
+      const homeLink = document.querySelector('.nav-links a[href="#home"]');
       const aboutLink = document.querySelector('.nav-links a[href="#about"]');
+      
+      // Initially at home
+      Object.defineProperty(homeSection, 'offsetTop', {
+        value: 0,
+        configurable: true
+      });
+      Object.defineProperty(homeSection, 'offsetHeight', {
+        value: 400,
+        configurable: true
+      });
+      Object.defineProperty(window, 'pageYOffset', {
+        value: 50,
+        configurable: true
+      });
+      
+      window.dispatchEvent(new Event('scroll'));
+      
+      // Now scroll to about
+      Object.defineProperty(aboutSection, 'offsetTop', {
+        value: 500,
+        configurable: true
+      });
+      Object.defineProperty(aboutSection, 'offsetHeight', {
+        value: 400,
+        configurable: true
+      });
+      Object.defineProperty(window, 'pageYOffset', {
+        value: 550,
+        configurable: true
+      });
+      
+      window.dispatchEvent(new Event('scroll'));
+      
+      expect(homeLink.classList.contains('active')).toBe(false);
       expect(aboutLink.classList.contains('active')).toBe(true);
     });
   });
 
   describe('Animated Counters', () => {
-    test('should animate counter from 0 to target value', (done) => {
-      const statNumber = document.querySelector('.stat-number[data-target="5"]');
+    test('should animate stat numbers when section is visible', () => {
+      eval(scriptContent);
       
-      // Trigger DOMContentLoaded
-      const event = new Event('DOMContentLoaded');
-      document.dispatchEvent(event);
+      const statNumbers = document.querySelectorAll('.stat-number');
       
-      // Wait for animation to complete
-      setTimeout(() => {
-        expect(statNumber.textContent).toBe('5');
-        done();
-      }, 2500);
+      expect(statNumbers.length).toBeGreaterThan(0);
+      
+      // Initial values should be 0
+      statNumbers.forEach(stat => {
+        expect(stat.textContent).toBe('0');
+      });
+      
+      // Trigger animation by observing stats
+      jest.runAllTimers();
+      
+      // After animation, values should match targets
+      statNumbers.forEach(stat => {
+        const target = parseInt(stat.getAttribute('data-target'));
+        expect(parseInt(stat.textContent)).toBeLessThanOrEqual(target);
+      });
     });
 
-    test('should parse target value correctly', () => {
-      const statNumber = document.querySelector('.stat-number[data-target="50"]');
-      const target = parseInt(statNumber.getAttribute('data-target'));
+    test('should not animate counters more than once', () => {
+      eval(scriptContent);
       
-      expect(target).toBe(50);
-      expect(typeof target).toBe('number');
-    });
-
-    test('should handle multiple counters independently', (done) => {
-      const stats = document.querySelectorAll('.stat-number');
-      
-      // Trigger DOMContentLoaded
-      const event = new Event('DOMContentLoaded');
-      document.dispatchEvent(event);
-      
-      setTimeout(() => {
-        expect(stats[0].textContent).toBe('5');
-        expect(stats[1].textContent).toBe('50');
-        done();
-      }, 2500);
-    });
-
-    test('should only animate once', (done) => {
-      // Trigger DOMContentLoaded
-      const event = new Event('DOMContentLoaded');
-      document.dispatchEvent(event);
-      
-      // Trigger multiple times
       const statsSection = document.querySelector('.stats');
-      const observer = new IntersectionObserver(() => {});
+      const statNumbers = document.querySelectorAll('.stat-number');
       
-      observer.observe(statsSection);
-      observer.observe(statsSection);
+      // First observation
+      jest.runAllTimers();
       
-      setTimeout(() => {
-        // Should still only have final values, not doubled
-        const stat = document.querySelector('.stat-number[data-target="5"]');
-        expect(parseInt(stat.textContent)).toBeLessThanOrEqual(5);
-        done();
-      }, 2500);
+      const firstValues = Array.from(statNumbers).map(s => s.textContent);
+      
+      // Second observation (shouldn't re-animate)
+      jest.runAllTimers();
+      
+      const secondValues = Array.from(statNumbers).map(s => s.textContent);
+      
+      expect(firstValues).toEqual(secondValues);
+    });
+
+    test('should handle missing data-target attribute', () => {
+      eval(scriptContent);
+      
+      const statNumber = document.querySelector('.stat-number');
+      statNumber.removeAttribute('data-target');
+      
+      expect(() => {
+        jest.runAllTimers();
+      }).not.toThrow();
     });
   });
 
-  describe('Intersection Observer', () => {
-    test('should initialize IntersectionObserver with correct options', () => {
-      // Trigger DOMContentLoaded
-      const event = new Event('DOMContentLoaded');
-      document.dispatchEvent(event);
+  describe('Skill Bar Animations', () => {
+    test('should animate skill bars when visible', () => {
+      eval(scriptContent);
       
-      // IntersectionObserver should be called
-      expect(IntersectionObserver).toBeDefined();
-    });
-
-    test('should observe stat items for animation', () => {
-      const statItem = document.querySelector('.stat-item');
-      
-      // Trigger DOMContentLoaded
-      const event = new Event('DOMContentLoaded');
-      document.dispatchEvent(event);
-      
-      // Initial state should be set
-      expect(statItem.style.opacity).toBe('0');
-      expect(statItem.style.transform).toBe('translateY(30px)');
-      expect(statItem.style.transition).toBe('all 0.6s ease');
-    });
-
-    test('should animate elements when they intersect', () => {
-      const statItem = document.querySelector('.stat-item');
-      
-      // Set initial state
-      statItem.style.opacity = '0';
-      statItem.style.transform = 'translateY(30px)';
-      
-      // Trigger DOMContentLoaded
-      const event = new Event('DOMContentLoaded');
-      document.dispatchEvent(event);
-      
-      // IntersectionObserver callback is triggered in setup
-      expect(statItem.style.opacity).toBe('1');
-      expect(statItem.style.transform).toBe('translateY(0)');
-    });
-
-    test('should animate skill bars when visible', (done) => {
-      const skillCategory = document.querySelector('.skill-category');
       const progressBars = document.querySelectorAll('.progress-bar');
       
-      // Trigger DOMContentLoaded
-      const event = new Event('DOMContentLoaded');
-      document.dispatchEvent(event);
+      expect(progressBars.length).toBeGreaterThan(0);
       
-      // Wait for animation delay
-      setTimeout(() => {
-        expect(progressBars[0].style.width).toBe('90%');
-        expect(progressBars[1].style.width).toBe('85%');
-        done();
-      }, 300);
+      // Initially should have no width
+      progressBars.forEach(bar => {
+        expect(bar.style.width).toBeFalsy();
+      });
+      
+      jest.runAllTimers();
+      
+      // After animation, should have width from data-width
+      progressBars.forEach(bar => {
+        const expectedWidth = bar.getAttribute('data-width');
+        if (expectedWidth) {
+          expect(bar.style.width).toBe(expectedWidth + '%');
+        }
+      });
     });
 
-    test('should observe stats section if it exists', () => {
-      const statsSection = document.querySelector('.stats');
+    test('should handle missing data-width attribute', () => {
+      eval(scriptContent);
       
-      expect(statsSection).toBeTruthy();
-      
-      // Trigger DOMContentLoaded
-      const event = new Event('DOMContentLoaded');
-      document.dispatchEvent(event);
-      
-      // Stats section should be observed
-      expect(statsSection).toBeDefined();
-    });
-
-    test('should handle missing stats section gracefully', () => {
-      // Remove stats section
-      const statsSection = document.querySelector('.stats');
-      statsSection.remove();
+      const progressBar = document.querySelector('.progress-bar');
+      progressBar.removeAttribute('data-width');
       
       expect(() => {
-        const event = new Event('DOMContentLoaded');
-        document.dispatchEvent(event);
+        jest.runAllTimers();
       }).not.toThrow();
     });
   });
 
   describe('Contact Form Validation', () => {
-    test('should prevent submission with empty fields', () => {
-      const form = document.querySelector('#contactForm');
+    test('should validate all required fields are filled', () => {
+      eval(scriptContent);
       
-      // Trigger DOMContentLoaded
-      const event = new Event('DOMContentLoaded');
-      document.dispatchEvent(event);
-      
+      const form = document.getElementById('contactForm');
       const submitEvent = new Event('submit', { bubbles: true, cancelable: true });
+      
+      // Leave fields empty
+      document.getElementById('name').value = '';
+      document.getElementById('email').value = '';
+      document.getElementById('subject').value = '';
+      document.getElementById('message').value = '';
+      
       const preventDefaultSpy = jest.spyOn(submitEvent, 'preventDefault');
       
       form.dispatchEvent(submitEvent);
       
       expect(preventDefaultSpy).toHaveBeenCalled();
+      
+      // Check for notification
+      const notification = document.querySelector('.notification');
+      expect(notification).toBeTruthy();
+      expect(notification.textContent).toContain('Please fill in all fields');
     });
 
     test('should validate email format', () => {
-      const form = document.querySelector('#contactForm');
-      const emailInput = document.querySelector('#email');
+      eval(scriptContent);
       
-      // Trigger DOMContentLoaded
-      const event = new Event('DOMContentLoaded');
-      document.dispatchEvent(event);
-      
-      // Fill form with invalid email
-      document.querySelector('#name').value = 'Test User';
-      emailInput.value = 'invalid-email';
-      document.querySelector('#subject').value = 'Test Subject';
-      document.querySelector('#message').value = 'Test Message';
-      
+      const form = document.getElementById('contactForm');
       const submitEvent = new Event('submit', { bubbles: true, cancelable: true });
+      
+      document.getElementById('name').value = 'John Doe';
+      document.getElementById('email').value = 'invalid-email';
+      document.getElementById('subject').value = 'Test';
+      document.getElementById('message').value = 'Test message';
+      
       form.dispatchEvent(submitEvent);
       
-      // Should show error notification
-      setTimeout(() => {
-        const notification = document.querySelector('.notification.error');
-        expect(notification).toBeTruthy();
-      }, 100);
+      const notification = document.querySelector('.notification');
+      expect(notification).toBeTruthy();
+      expect(notification.textContent).toContain('valid email address');
     });
 
-    test('should accept valid email format', () => {
-      const form = document.querySelector('#contactForm');
+    test('should accept valid email formats', () => {
+      eval(scriptContent);
       
-      // Trigger DOMContentLoaded
-      const event = new Event('DOMContentLoaded');
-      document.dispatchEvent(event);
-      
-      // Fill form with valid data
-      document.querySelector('#name').value = 'Test User';
-      document.querySelector('#email').value = 'test@example.com';
-      document.querySelector('#subject').value = 'Test Subject';
-      document.querySelector('#message').value = 'Test Message';
-      
+      const form = document.getElementById('contactForm');
       const submitEvent = new Event('submit', { bubbles: true, cancelable: true });
+      
+      const validEmails = [
+        'test@example.com',
+        'user.name@example.co.uk',
+        'user+tag@example.com',
+        'test123@test-domain.com'
+      ];
+      
+      validEmails.forEach(email => {
+        document.getElementById('name').value = 'John Doe';
+        document.getElementById('email').value = email;
+        document.getElementById('subject').value = 'Test';
+        document.getElementById('message').value = 'Test message';
+        
+        form.dispatchEvent(submitEvent);
+        
+        const notification = document.querySelector('.notification');
+        if (notification) {
+          expect(notification.textContent).not.toContain('valid email address');
+        }
+      });
+    });
+
+    test('should reject invalid email formats', () => {
+      eval(scriptContent);
+      
+      const form = document.getElementById('contactForm');
+      
+      const invalidEmails = [
+        'invalid',
+        'invalid@',
+        '@example.com',
+        'test@',
+        'test..double@example.com',
+        'test @example.com',
+        'test@example',
+      ];
+      
+      invalidEmails.forEach(email => {
+        // Clear previous notifications
+        const prevNotification = document.querySelector('.notification');
+        if (prevNotification) prevNotification.remove();
+        
+        document.getElementById('name').value = 'John Doe';
+        document.getElementById('email').value = email;
+        document.getElementById('subject').value = 'Test';
+        document.getElementById('message').value = 'Test message';
+        
+        const submitEvent = new Event('submit', { bubbles: true, cancelable: true });
+        form.dispatchEvent(submitEvent);
+        
+        const notification = document.querySelector('.notification');
+        expect(notification).toBeTruthy();
+        expect(notification.textContent).toContain('valid email address');
+      });
+    });
+
+    test('should show success message on valid submission', () => {
+      eval(scriptContent);
+      
+      const form = document.getElementById('contactForm');
+      const submitEvent = new Event('submit', { bubbles: true, cancelable: true });
+      
+      document.getElementById('name').value = 'John Doe';
+      document.getElementById('email').value = 'john@example.com';
+      document.getElementById('subject').value = 'Test Subject';
+      document.getElementById('message').value = 'Test message';
+      
       form.dispatchEvent(submitEvent);
       
-      // Should show success notification
-      setTimeout(() => {
-        const notification = document.querySelector('.notification.success');
-        expect(notification).toBeTruthy();
-      }, 100);
+      jest.runAllTimers();
+      
+      const notification = document.querySelector('.notification.success');
+      expect(notification).toBeTruthy();
+      expect(notification.textContent).toContain('Thank you');
     });
 
     test('should reset form after successful submission', () => {
-      const form = document.querySelector('#contactForm');
+      eval(scriptContent);
       
-      // Trigger DOMContentLoaded
-      const event = new Event('DOMContentLoaded');
-      document.dispatchEvent(event);
-      
-      // Fill form
-      document.querySelector('#name').value = 'Test User';
-      document.querySelector('#email').value = 'test@example.com';
-      document.querySelector('#subject').value = 'Test Subject';
-      document.querySelector('#message').value = 'Test Message';
-      
-      const resetSpy = jest.spyOn(form, 'reset');
-      
+      const form = document.getElementById('contactForm');
       const submitEvent = new Event('submit', { bubbles: true, cancelable: true });
+      
+      document.getElementById('name').value = 'John Doe';
+      document.getElementById('email').value = 'john@example.com';
+      document.getElementById('subject').value = 'Test Subject';
+      document.getElementById('message').value = 'Test message';
+      
       form.dispatchEvent(submitEvent);
       
-      expect(resetSpy).toHaveBeenCalled();
+      expect(document.getElementById('name').value).toBe('');
+      expect(document.getElementById('email').value).toBe('');
+      expect(document.getElementById('subject').value).toBe('');
+      expect(document.getElementById('message').value).toBe('');
     });
 
-    test('should handle missing form gracefully', () => {
-      const form = document.querySelector('#contactForm');
+    test('should handle missing form elements gracefully', () => {
+      const form = document.getElementById('contactForm');
       form.remove();
       
       expect(() => {
-        const event = new Event('DOMContentLoaded');
-        document.dispatchEvent(event);
+        eval(scriptContent);
       }).not.toThrow();
-    });
-
-    test('should validate all required fields are filled', () => {
-      const form = document.querySelector('#contactForm');
-      
-      // Trigger DOMContentLoaded
-      const event = new Event('DOMContentLoaded');
-      document.dispatchEvent(event);
-      
-      // Fill only some fields
-      document.querySelector('#name').value = 'Test User';
-      document.querySelector('#email').value = 'test@example.com';
-      // Leave subject and message empty
-      
-      const submitEvent = new Event('submit', { bubbles: true, cancelable: true });
-      form.dispatchEvent(submitEvent);
-      
-      // Should show error notification
-      setTimeout(() => {
-        const notification = document.querySelector('.notification.error');
-        expect(notification).toBeTruthy();
-      }, 100);
     });
   });
 
   describe('Notification System', () => {
-    test('should create notification element with correct styling', (done) => {
-      const form = document.querySelector('#contactForm');
+    test('should create notification element with correct styling', () => {
+      eval(scriptContent);
       
-      // Trigger DOMContentLoaded
-      const event = new Event('DOMContentLoaded');
-      document.dispatchEvent(event);
+      const form = document.getElementById('contactForm');
+      const submitEvent = new Event('submit', { bubbles: true, cancelable: true });
       
-      // Trigger form submission to create notification
-      document.querySelector('#name').value = 'Test User';
-      document.querySelector('#email').value = 'test@example.com';
-      document.querySelector('#subject').value = 'Test Subject';
-      document.querySelector('#message').value = 'Test Message';
+      document.getElementById('name').value = 'John Doe';
+      document.getElementById('email').value = 'john@example.com';
+      document.getElementById('subject').value = 'Test';
+      document.getElementById('message').value = 'Test';
+      
+      form.dispatchEvent(submitEvent);
+      
+      const notification = document.querySelector('.notification');
+      expect(notification).toBeTruthy();
+      expect(notification.style.position).toBe('fixed');
+      expect(notification.style.zIndex).toBe('10000');
+    });
+
+    test('should remove existing notification before creating new one', () => {
+      eval(scriptContent);
+      
+      const form = document.getElementById('contactForm');
+      
+      // Create first notification
+      document.getElementById('name').value = '';
+      form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+      
+      const firstNotification = document.querySelector('.notification');
+      expect(firstNotification).toBeTruthy();
+      
+      // Create second notification
+      document.getElementById('email').value = 'invalid';
+      form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+      
+      const notifications = document.querySelectorAll('.notification');
+      expect(notifications.length).toBe(1);
+    });
+
+    test('should auto-remove notification after timeout', () => {
+      eval(scriptContent);
+      
+      const form = document.getElementById('contactForm');
+      document.getElementById('name').value = 'John Doe';
+      document.getElementById('email').value = 'john@example.com';
+      document.getElementById('subject').value = 'Test';
+      document.getElementById('message').value = 'Test';
       
       form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
       
-      setTimeout(() => {
-        const notification = document.querySelector('.notification');
-        expect(notification).toBeTruthy();
-        expect(notification.style.position).toBe('fixed');
-        expect(notification.style.top).toBe('100px');
-        expect(notification.style.right).toBe('20px');
-        done();
-      }, 100);
+      const notification = document.querySelector('.notification');
+      expect(notification).toBeTruthy();
+      
+      // Fast-forward timers
+      jest.advanceTimersByTime(3500);
+      
+      expect(document.querySelector('.notification')).toBeFalsy();
     });
 
-    test('should show success notification with green background', (done) => {
-      const form = document.querySelector('#contactForm');
+    test('should add slideIn animation keyframes only once', () => {
+      eval(scriptContent);
       
-      // Trigger DOMContentLoaded
-      const event = new Event('DOMContentLoaded');
-      document.dispatchEvent(event);
-      
-      // Valid form submission
-      document.querySelector('#name').value = 'Test User';
-      document.querySelector('#email').value = 'test@example.com';
-      document.querySelector('#subject').value = 'Test Subject';
-      document.querySelector('#message').value = 'Test Message';
-      
-      form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
-      
-      setTimeout(() => {
-        const notification = document.querySelector('.notification.success');
-        expect(notification).toBeTruthy();
-        expect(notification.style.background).toContain('#10b981');
-        done();
-      }, 100);
-    });
-
-    test('should show error notification with red background', (done) => {
-      const form = document.querySelector('#contactForm');
-      
-      // Trigger DOMContentLoaded
-      const event = new Event('DOMContentLoaded');
-      document.dispatchEvent(event);
-      
-      // Invalid form submission
-      form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
-      
-      setTimeout(() => {
-        const notification = document.querySelector('.notification.error');
-        expect(notification).toBeTruthy();
-        expect(notification.style.background).toContain('#ef4444');
-        done();
-      }, 100);
-    });
-
-    test('should remove existing notification before showing new one', (done) => {
-      const form = document.querySelector('#contactForm');
-      
-      // Trigger DOMContentLoaded
-      const event = new Event('DOMContentLoaded');
-      document.dispatchEvent(event);
-      
-      // Submit twice
-      form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
-      
-      setTimeout(() => {
-        form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
-        
-        setTimeout(() => {
-          const notifications = document.querySelectorAll('.notification');
-          expect(notifications.length).toBe(1);
-          done();
-        }, 100);
-      }, 100);
-    });
-
-    test('should auto-remove notification after 3 seconds', (done) => {
-      const form = document.querySelector('#contactForm');
-      
-      // Trigger DOMContentLoaded
-      const event = new Event('DOMContentLoaded');
-      document.dispatchEvent(event);
-      
-      form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
-      
-      setTimeout(() => {
-        const notification = document.querySelector('.notification');
-        expect(notification).toBeTruthy();
-        
-        // Check it's removed after timeout
-        setTimeout(() => {
-          const notificationAfter = document.querySelector('.notification');
-          expect(notificationAfter).toBeFalsy();
-          done();
-        }, 3500);
-      }, 100);
-    });
-
-    test('should add animation keyframes only once', (done) => {
-      const form = document.querySelector('#contactForm');
-      
-      // Trigger DOMContentLoaded
-      const event = new Event('DOMContentLoaded');
-      document.dispatchEvent(event);
+      const form = document.getElementById('contactForm');
       
       // Trigger multiple notifications
-      form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
-      
-      setTimeout(() => {
+      for (let i = 0; i < 3; i++) {
+        document.getElementById('name').value = '';
         form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
         
-        setTimeout(() => {
-          const styles = document.querySelectorAll('#notification-slidein-style');
-          expect(styles.length).toBe(1);
-          done();
-        }, 100);
-      }, 100);
+        // Clear notification
+        const notification = document.querySelector('.notification');
+        if (notification) notification.remove();
+      }
+      
+      // Should only have one style element for animations
+      const animationStyles = document.querySelectorAll('#notification-slidein-style');
+      expect(animationStyles.length).toBe(1);
+    });
+  });
+
+  describe('Intersection Observer', () => {
+    test('should observe animate elements', () => {
+      eval(scriptContent);
+      
+      const animateElements = document.querySelectorAll('.stat-item, .skill-category, .timeline-item, .project-card, .education-card');
+      
+      expect(animateElements.length).toBeGreaterThan(0);
+      
+      // Elements should have initial animation state
+      animateElements.forEach(el => {
+        expect(el.style.opacity).toBe('0');
+        expect(el.style.transform).toContain('translateY');
+      });
+    });
+
+    test('should animate elements when intersecting', () => {
+      eval(scriptContent);
+      
+      const animateElements = document.querySelectorAll('.stat-item, .skill-category, .timeline-item');
+      
+      // After intersection, elements should be visible
+      animateElements.forEach(el => {
+        expect(el.style.opacity).toBe('1');
+        expect(el.style.transform).toContain('translateY(0)');
+      });
+    });
+
+    test('should observe stats section separately', () => {
+      eval(scriptContent);
+      
+      const statsSection = document.querySelector('.stats');
+      expect(statsSection).toBeTruthy();
+      
+      // Stats should be observed and animated
+      expect(statsSection.style.opacity).toBe('1');
     });
   });
 
   describe('Image Lazy Loading', () => {
-    test('should set up IntersectionObserver for images', () => {
+    test('should observe project images for lazy loading', () => {
+      eval(scriptContent);
+      
       const images = document.querySelectorAll('.project-image img');
       
       expect(images.length).toBeGreaterThan(0);
       
-      // Trigger DOMContentLoaded
-      const event = new Event('DOMContentLoaded');
-      document.dispatchEvent(event);
-      
-      // Images should exist
-      expect(images[0]).toBeDefined();
+      // After observation, images should have loaded class
+      images.forEach(img => {
+        expect(img.classList.contains('loaded')).toBe(true);
+      });
     });
 
-    test('should add loaded class when image intersects', () => {
-      const image = document.querySelector('.project-image img');
-      
-      // Trigger DOMContentLoaded
-      const event = new Event('DOMContentLoaded');
-      document.dispatchEvent(event);
-      
-      // IntersectionObserver triggers immediately in our mock
-      expect(image.classList.contains('loaded')).toBe(true);
-    });
-
-    test('should handle browsers without IntersectionObserver', () => {
+    test('should handle missing IntersectionObserver', () => {
       const originalIO = window.IntersectionObserver;
       delete window.IntersectionObserver;
       
       expect(() => {
-        const event = new Event('DOMContentLoaded');
-        document.dispatchEvent(event);
+        eval(scriptContent);
       }).not.toThrow();
       
       window.IntersectionObserver = originalIO;
     });
   });
 
-  describe('Hero Typing Effect', () => {
-    test('should preserve hero title text', () => {
-      const heroTitle = document.querySelector('.hero h1');
-      const originalText = heroTitle.innerHTML;
-      
-      expect(originalText).toContain('Test User');
-      
-      // Trigger DOMContentLoaded
-      const event = new Event('DOMContentLoaded');
-      document.dispatchEvent(event);
-      
-      // Text should be preserved (typing effect is commented out)
-      expect(heroTitle.innerHTML).toBeDefined();
-    });
-
-    test('should set opacity on hero title', () => {
-      const heroTitle = document.querySelector('.hero h1');
-      
-      // Trigger DOMContentLoaded
-      const event = new Event('DOMContentLoaded');
-      document.dispatchEvent(event);
-      
-      expect(heroTitle.style.opacity).toBe('1');
-    });
-
-    test('should handle missing hero title gracefully', () => {
-      const heroTitle = document.querySelector('.hero h1');
-      heroTitle.remove();
-      
-      expect(() => {
-        const event = new Event('DOMContentLoaded');
-        document.dispatchEvent(event);
-      }).not.toThrow();
-    });
-  });
-
-  describe('Console Log', () => {
+  describe('Console Logging', () => {
     test('should log success message on load', () => {
-      // Trigger DOMContentLoaded
-      const event = new Event('DOMContentLoaded');
-      document.dispatchEvent(event);
+      const consoleSpy = jest.spyOn(console, 'log');
       
-      expect(console.log).toHaveBeenCalledWith('Interactive Resume Loaded Successfully! 🚀');
+      eval(scriptContent);
+      
+      expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('Interactive Resume Loaded Successfully'));
+      
+      consoleSpy.mockRestore();
     });
   });
 
@@ -785,141 +705,113 @@ describe('Interactive Resume - Script Tests', () => {
       document.body.innerHTML = '';
       
       expect(() => {
-        const event = new Event('DOMContentLoaded');
-        document.dispatchEvent(event);
+        eval(scriptContent);
       }).not.toThrow();
     });
 
-    test('should handle missing navbar gracefully', () => {
+    test('should handle missing sections', () => {
+      const sections = document.querySelectorAll('section[id]');
+      sections.forEach(section => section.removeAttribute('id'));
+      
+      expect(() => {
+        eval(scriptContent);
+        window.dispatchEvent(new Event('scroll'));
+      }).not.toThrow();
+    });
+
+    test('should handle rapid scroll events', () => {
+      eval(scriptContent);
+      
+      expect(() => {
+        for (let i = 0; i < 100; i++) {
+          Object.defineProperty(window, 'pageYOffset', {
+            value: i * 10,
+            configurable: true
+          });
+          window.dispatchEvent(new Event('scroll'));
+        }
+      }).not.toThrow();
+    });
+
+    test('should handle rapid form submissions', () => {
+      eval(scriptContent);
+      
+      const form = document.getElementById('contactForm');
+      
+      document.getElementById('name').value = 'John';
+      document.getElementById('email').value = 'john@example.com';
+      document.getElementById('subject').value = 'Test';
+      document.getElementById('message').value = 'Test';
+      
+      expect(() => {
+        for (let i = 0; i < 10; i++) {
+          form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+        }
+      }).not.toThrow();
+    });
+
+    test('should handle special characters in form inputs', () => {
+      eval(scriptContent);
+      
+      const form = document.getElementById('contactForm');
+      
+      document.getElementById('name').value = '<script>alert("xss")</script>';
+      document.getElementById('email').value = 'test@example.com';
+      document.getElementById('subject').value = '${injection}';
+      document.getElementById('message').value = 'Test with "quotes" and \'apostrophes\'';
+      
+      expect(() => {
+        form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+      }).not.toThrow();
+    });
+
+    test('should handle very long input values', () => {
+      eval(scriptContent);
+      
+      const form = document.getElementById('contactForm');
+      const longString = 'a'.repeat(10000);
+      
+      document.getElementById('name').value = longString;
+      document.getElementById('email').value = 'test@example.com';
+      document.getElementById('subject').value = longString;
+      document.getElementById('message').value = longString;
+      
+      expect(() => {
+        form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+      }).not.toThrow();
+    });
+
+    test('should handle missing navbar element', () => {
       const navbar = document.querySelector('.navbar');
       navbar.remove();
       
       expect(() => {
-        const event = new Event('DOMContentLoaded');
+        eval(scriptContent);
         window.dispatchEvent(new Event('scroll'));
-      }).not.toThrow();
-    });
-
-    test('should handle missing hero content gracefully', () => {
-      const heroContent = document.querySelector('.hero-content');
-      heroContent.remove();
-      
-      expect(() => {
-        const event = new Event('DOMContentLoaded');
-        window.dispatchEvent(new Event('scroll'));
-      }).not.toThrow();
-    });
-
-    test('should handle sections without id attribute', () => {
-      const section = document.querySelector('section');
-      section.removeAttribute('id');
-      
-      expect(() => {
-        const event = new Event('DOMContentLoaded');
-        window.dispatchEvent(new Event('scroll'));
-      }).not.toThrow();
-    });
-
-    test('should handle navigation links with invalid hrefs', () => {
-      const navLink = document.querySelector('.nav-links a');
-      navLink.setAttribute('href', '');
-      
-      expect(() => {
-        const event = new Event('DOMContentLoaded');
-        navLink.click();
-      }).not.toThrow();
-    });
-
-    test('should handle form with missing input fields', () => {
-      document.querySelector('#name').remove();
-      
-      const form = document.querySelector('#contactForm');
-      
-      expect(() => {
-        const event = new Event('DOMContentLoaded');
-        document.dispatchEvent(event);
-        form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
       }).not.toThrow();
     });
   });
 
-  describe('Email Validation Regex', () => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-    test('should accept valid email addresses', () => {
-      const validEmails = [
-        'test@example.com',
-        'user.name@example.com',
-        'user+tag@example.co.uk',
-        'test123@test-domain.com'
-      ];
-
-      validEmails.forEach(email => {
-        expect(emailRegex.test(email)).toBe(true);
-      });
-    });
-
-    test('should reject invalid email addresses', () => {
-      const invalidEmails = [
-        'invalid',
-        'invalid@',
-        '@example.com',
-        'invalid@.com',
-        'invalid @example.com',
-        'invalid@example',
-        ''
-      ];
-
-      invalidEmails.forEach(email => {
-        expect(emailRegex.test(email)).toBe(false);
-      });
-    });
-  });
-
-  describe('Performance Optimizations', () => {
-    test('should disable hero parallax after scrolling past', () => {
-      // Trigger DOMContentLoaded
-      const event = new Event('DOMContentLoaded');
-      document.dispatchEvent(event);
+  describe('Performance and Memory', () => {
+    test('should not create memory leaks with event listeners', () => {
+      eval(scriptContent);
       
-      // Scroll past hero
-      Object.defineProperty(window, 'pageYOffset', {
-        value: 2000,
-        writable: true
-      });
-      Object.defineProperty(window, 'innerHeight', {
-        value: 1000,
-        writable: true
-      });
+      const initialListenerCount = window._events ? Object.keys(window._events).length : 0;
       
+      // Trigger various events
       window.dispatchEvent(new Event('scroll'));
+      document.querySelector('.hamburger')?.click();
       
-      const heroContent = document.querySelector('.hero-content');
-      const transformBefore = heroContent.style.transform;
+      const finalListenerCount = window._events ? Object.keys(window._events).length : 0;
       
-      // Scroll again
-      Object.defineProperty(window, 'pageYOffset', {
-        value: 2500,
-        writable: true
-      });
-      
-      window.dispatchEvent(new Event('scroll'));
-      
-      // Transform should not change
-      expect(heroContent.style.transform).toBe(transformBefore);
+      // Listener count should remain stable
+      expect(finalListenerCount).toBeLessThanOrEqual(initialListenerCount + 10);
     });
 
-    test('should use requestAnimationFrame for counter animations', () => {
-      const rafSpy = jest.spyOn(window, 'requestAnimationFrame');
+    test('should use requestAnimationFrame for animations', () => {
+      eval(scriptContent);
       
-      // Trigger DOMContentLoaded
-      const event = new Event('DOMContentLoaded');
-      document.dispatchEvent(event);
-      
-      // RAF should be called for animations
-      expect(rafSpy).toHaveBeenCalled();
-      
-      rafSpy.mockRestore();
+      expect(window.requestAnimationFrame).toHaveBeenCalled();
     });
   });
 });

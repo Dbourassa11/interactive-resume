@@ -4,273 +4,274 @@ This directory contains comprehensive unit tests for the Interactive Resume proj
 
 ## Overview
 
-The test suite provides thorough coverage of all JavaScript functionality, HTML structure validation, and CSS quality checks. Tests are written using Jest with jsdom for DOM manipulation testing.
+The test suite includes over 280 test cases covering:
+- JavaScript functionality (script.js)
+- HTML structure and validation (index.html)
+- CSS styling and best practices (styles.css)
 
 ## Test Files
 
-### 1. `script.test.js`
-Comprehensive unit tests for `script.js` covering:
-- **Mobile Navigation**: Hamburger menu toggle, menu closing on link click
-- **Smooth Scrolling**: Navigation link behavior, offset calculations
-- **Scroll Handler**: Navbar styling changes, parallax effects, active link highlighting
-- **Animated Counters**: Counter animations, timing, multiple counter handling
-- **Intersection Observer**: Element animations, stats triggering, skill bar animations
-- **Contact Form**: Validation, email format checking, form submission, notification system
-- **Notification System**: Display, timing, styling, auto-removal
-- **Image Lazy Loading**: IntersectionObserver setup, image loading
-- **Hero Typing Effect**: Text preservation, opacity handling
-- **Edge Cases**: Missing elements, error handling, empty DOM scenarios
+### 1. `script.test.js` (817 lines)
+Comprehensive tests for all JavaScript functionality including:
+- Mobile navigation toggle
+- Smooth scrolling
+- Navbar scroll effects
+- Parallax animations
+- Active navigation highlighting
+- Animated counters
+- Skill bar animations
+- Contact form validation
+- Notification system
+- Intersection Observer
+- Image lazy loading
+- Edge cases and error handling
 
-### 2. `html.validation.test.js`
-HTML structure and validation tests covering:
-- **Document Structure**: DOCTYPE, html/head/body tags, proper nesting
-- **Meta Tags**: Charset, viewport, description, title
-- **Stylesheet Links**: CSS files, Font Awesome CDN
-- **Navigation**: Nav element, links, hamburger menu, list structure
-- **Sections**: Hero, about, skills, experience, education, projects, contact
-- **Semantic HTML**: Proper heading hierarchy, section tags, footer
-- **Accessibility**: ARIA labels, alt attributes, keyboard navigation, focus management
-- **Form Structure**: Input fields, labels, validation attributes
-- **Links**: External links, internal anchors, security attributes
-- **Content Structure**: Containers, grids, cards, timelines
-- **Data Attributes**: Counter targets, progress bar widths
-- **Icons**: Font Awesome usage
-- **Best Practices**: Lowercase tags, proper indentation, tag closing
-- **SEO**: Title, meta description, heading hierarchy
-- **Responsive Design**: Viewport meta, container classes, grid layouts
-- **Performance**: Script positioning, CDN usage
+### 2. `html.validation.test.js` (696 lines)
+Tests for HTML structure, semantics, and accessibility:
+- Document structure validation
+- Meta tags and SEO
+- CSS and JavaScript resources
+- Navigation structure
+- All content sections (Hero, About, Skills, Experience, Education, Projects, Contact)
+- Footer
+- Accessibility features
+- HTML syntax validation
+- Performance best practices
 
-### 3. `css.validation.test.js`
-CSS quality and validation tests covering:
-- **CSS Reset**: Universal selector, box-sizing
-- **Custom Properties**: Color variables, transition variables, shadow variables
-- **Layout**: Container styles, max-width, centering
-- **Smooth Scrolling**: HTML scroll-behavior
-- **Navigation**: Navbar positioning, z-index, flexbox, hover effects
-- **Hero Section**: Min-height, flexbox, gradients, parallax setup
-- **Sections**: Padding, background colors, section titles
-- **Buttons**: Primary/secondary styles, hover effects, transforms
-- **Statistics**: Stats grid, counter styles
-- **Skills**: Skills grid, progress bars, animations
-- **Timeline**: Timeline structure, dots, content
-- **Project Cards**: Grid layout, image overlays, tags, shadows
-- **Education**: Grid layout, card styles, icons
-- **Contact**: Form styles, input styling, focus states
-- **Footer**: Footer layout, links
-- **Animations**: Transitions, keyframes, transforms
-- **Media Queries**: Responsive breakpoints, mobile navigation
-- **Flexbox**: Display, direction, justify, align
-- **Grid**: Grid templates, columns, gaps
-- **Typography**: Font sizes, weights, alignment
-- **Colors**: Gradients, rgba, gradient text
-- **Shadows**: Box-shadow, depth effects
-- **Positioning**: Fixed, relative, absolute
-- **Best Practices**: !important usage, lowercase properties, shorthand
-- **Accessibility**: Focus styles, contrast
-- **Vendor Prefixes**: Webkit prefixes
+### 3. `css.validation.test.js` (859 lines)
+Tests for CSS styling, responsiveness, and best practices:
+- CSS variables and theming
+- Global styles and reset
+- Navigation styles
+- Hero section styles
+- Section styles
+- Skills section styles
+- Timeline styles
+- Project cards
+- Form styles
+- Statistics/counters
+- Education cards
+- Footer styles
+- Animations and transitions
+- Responsive design
+- Accessibility features
+- Typography
+- Layout and spacing
+- Performance considerations
+- Best practices and code quality
 
-### 4. `setup.js`
-Test configuration and utilities:
-- Mock console methods to reduce test noise
-- Mock requestAnimationFrame for animation testing
-- Mock IntersectionObserver for scroll animations
-- DOM setup and cleanup helpers
-- Test isolation between runs
+### 4. `setup.js` (31 lines)
+Jest configuration and browser API mocks:
+- Mock for window.scrollTo
+- Mock for requestAnimationFrame
+- Mock for IntersectionObserver
+- Fake timers setup
 
 ## Running Tests
 
-### Install Dependencies
+### Prerequisites
 ```bash
 npm install
 ```
 
-### Run All Tests
+### Available Commands
+
 ```bash
+# Run all tests
 npm test
+
+# Run tests in watch mode (re-runs on file changes)
+npm run test:watch
+
+# Run tests with coverage report
+npm run test:coverage
+
+# Run tests with verbose output
+npm run test:verbose
+
+# Run specific test file
+npm run test:script      # JavaScript tests
+npm run test:html        # HTML validation tests
+npm run test:css         # CSS validation tests
+
+# Run tests matching a pattern
+npm test -- --testNamePattern="form validation"
 ```
 
-### Run Tests in Watch Mode
+### Coverage Report
+
+After running `npm run test:coverage`, view the report:
 ```bash
-npm test:watch
+# Terminal summary is displayed automatically
+
+# Open HTML report in browser
+open coverage/lcov-report/index.html  # macOS
+xdg-open coverage/lcov-report/index.html  # Linux
+start coverage/lcov-report/index.html  # Windows
 ```
-
-### Run Tests with Coverage
-```bash
-npm test:coverage
-```
-
-### Run Specific Test File
-```bash
-npm test script.test.js
-npm test html.validation.test.js
-npm test css.validation.test.js
-```
-
-## Test Coverage Goals
-
-The test suite aims for:
-- **Branches**: 70%+
-- **Functions**: 70%+
-- **Lines**: 70%+
-- **Statements**: 70%+
 
 ## Test Structure
 
-Each test file follows this structure:
+All tests follow the Arrange-Act-Assert (AAA) pattern:
 
 ```javascript
-describe('Feature Group', () => {
-  beforeAll(() => {
-    // Setup that runs once before all tests
-  });
-
-  beforeEach(() => {
-    // Setup that runs before each test
-  });
-
-  describe('Specific Feature', () => {
-    test('should do something specific', () => {
-      // Arrange
-      // Act
-      // Assert
-    });
-  });
-});
-```
-
-## Key Testing Patterns
-
-### DOM Testing
-```javascript
-// Create DOM structure
-document.body.innerHTML = `<div class="test">Content</div>`;
-
-// Trigger events
-element.click();
-window.dispatchEvent(new Event('scroll'));
-
-// Assert changes
-expect(element.classList.contains('active')).toBe(true);
-```
-
-### Async Testing
-```javascript
-test('should animate counter', (done) => {
-  // Setup
-  triggerAnimation();
+test('should do something specific', () => {
+  // Arrange: Set up test data and conditions
+  const element = document.querySelector('#myElement');
   
-  // Wait for animation
-  setTimeout(() => {
-    expect(counter.textContent).toBe('100');
-    done();
-  }, 2500);
+  // Act: Perform the action being tested
+  element.click();
+  
+  // Assert: Verify the expected outcome
+  expect(element.classList.contains('active')).toBe(true);
 });
 ```
 
-### Mock Testing
+## Coverage Goals
+
+All tests target **80%+ coverage** across:
+- Functions
+- Lines
+- Branches
+- Statements
+
+Current thresholds are enforced in `jest.config.js`.
+
+## Adding New Tests
+
+When adding new functionality:
+
+1. Determine the appropriate test file based on the code location
+2. Add tests following the existing patterns
+3. Use descriptive test names that explain what is being tested
+4. Test both happy paths and edge cases
+5. Mock external dependencies appropriately
+6. Run tests to verify: `npm test`
+7. Check coverage: `npm run test:coverage`
+
+Example:
 ```javascript
-const scrollToSpy = jest.spyOn(window, 'scrollTo').mockImplementation(() => {});
-// Trigger scroll
-expect(scrollToSpy).toHaveBeenCalledWith({
-  top: 930,
-  behavior: 'smooth'
-});
-scrollToSpy.mockRestore();
-```
+describe('New Feature', () => {
+  test('should handle the main use case', () => {
+    // Test implementation
+  });
 
-## Writing New Tests
+  test('should handle edge case with invalid input', () => {
+    // Test implementation
+  });
 
-When adding new features:
-
-1. **Add tests first** (TDD approach) or immediately after
-2. **Follow existing patterns** for consistency
-3. **Test happy paths and edge cases**
-4. **Mock external dependencies**
-5. **Use descriptive test names**
-6. **Group related tests** in describe blocks
-7. **Clean up after tests** to prevent pollution
-
-## Common Test Scenarios
-
-### Testing User Interactions
-```javascript
-test('should toggle menu on click', () => {
-  const button = document.querySelector('.hamburger');
-  button.click();
-  expect(menu.classList.contains('active')).toBe(true);
-});
-```
-
-### Testing Form Validation
-```javascript
-test('should validate email format', () => {
-  emailInput.value = 'invalid-email';
-  form.dispatchEvent(new Event('submit'));
-  expect(notification).toContain('valid email');
+  test('should handle missing elements gracefully', () => {
+    // Test implementation
+  });
 });
 ```
 
-### Testing Animations
-```javascript
-test('should apply parallax effect', () => {
-  Object.defineProperty(window, 'pageYOffset', { value: 200 });
-  window.dispatchEvent(new Event('scroll'));
-  expect(heroContent.style.transform).toBe('translateY(100px)');
-});
+## Mocking Strategy
+
+### Browser APIs
+- `window.scrollTo` - Mocked to prevent actual scrolling
+- `requestAnimationFrame` - Mocked for synchronous execution
+- `IntersectionObserver` - Mocked to simulate element visibility
+
+### Timers
+- Jest fake timers are used for testing time-dependent code
+- Use `jest.runAllTimers()` or `jest.advanceTimersByTime(ms)` in tests
+
+### DOM
+- jsdom provides a simulated browser environment
+- Full HTML is loaded before each test suite
+- DOM is reset between individual tests
+
+## Best Practices
+
+1. **Isolation**: Each test should be independent and not rely on other tests
+2. **Clarity**: Test names should clearly describe what is being tested
+3. **Completeness**: Test both success and failure scenarios
+4. **Performance**: Keep tests fast by avoiding unnecessary delays
+5. **Maintainability**: Update tests when functionality changes
+
+## Troubleshooting
+
+### Common Issues
+
+**Tests fail with "Cannot find module"**
+```bash
+Solution: npm install
+```
+
+**DOM elements not found**
+```bash
+Solution: Verify jsdom is configured correctly in jest.config.js
+```
+
+**Mocks not working**
+```bash
+Solution: Check setup.js is loaded in jest.config.js setupFilesAfterEnv
+```
+
+**Timeout errors**
+```bash
+Solution: Tests using timers may need jest.runAllTimers()
+```
+
+**Coverage below threshold**
+```bash
+Solution: Add more test cases or adjust thresholds in jest.config.js
 ```
 
 ## Continuous Integration
 
-Tests are designed to run in CI/CD pipelines:
-- Fast execution (< 10 seconds typical)
-- No external dependencies
-- Deterministic results
-- Clear failure messages
+The test suite is designed for CI/CD pipelines:
 
-## Troubleshooting
-
-### Tests Failing Locally
-1. Ensure all dependencies are installed: `npm install`
-2. Clear Jest cache: `npx jest --clearCache`
-3. Check Node version (14+ recommended)
-
-### Timeout Issues
-Increase Jest timeout in specific tests:
-```javascript
-test('long running test', (done) => {
-  // test code
-}, 10000); // 10 second timeout
+```yaml
+# Example GitHub Actions workflow
+name: Tests
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      - run: npm install
+      - run: npm test
+      - run: npm run test:coverage
 ```
 
-### Mock Not Working
-Ensure mocks are restored:
-```javascript
-afterEach(() => {
-  jest.restoreAllMocks();
-});
-```
+## Technologies
 
-## Best Practices
-
-1. **Test Behavior, Not Implementation**: Focus on what the code does, not how
-2. **Keep Tests Independent**: Each test should run in isolation
-3. **Use Meaningful Assertions**: Make it clear what's being tested
-4. **Avoid Test Duplication**: Use helper functions for repeated setup
-5. **Test Edge Cases**: Empty inputs, missing elements, error conditions
-6. **Keep Tests Fast**: Mock expensive operations
-7. **Write Maintainable Tests**: Clear, readable, well-organized
+- **Jest** (v29.7.0) - Testing framework
+- **jsdom** - DOM simulation
+- **@testing-library/jest-dom** (v6.1.5) - Custom DOM matchers
+- **@testing-library/dom** (v9.3.3) - DOM testing utilities
 
 ## Resources
 
-- [Jest Documentation](https://jestjs.io/docs/getting-started)
+- [Jest Documentation](https://jestjs.io/)
 - [Testing Library](https://testing-library.com/)
-- [JavaScript Testing Best Practices](https://github.com/goldbergyoni/javascript-testing-best-practices)
+- [jsdom Documentation](https://github.com/jsdom/jsdom)
+- [Jest DOM Matchers](https://github.com/testing-library/jest-dom)
 
-## Contributing
+## Test Statistics
 
-When contributing tests:
-1. Ensure all tests pass: `npm test`
-2. Maintain or improve coverage: `npm test:coverage`
-3. Follow existing naming conventions
-4. Add documentation for complex test scenarios
-5. Review test output for clarity
+- **Total Test Cases**: 280+
+- **Total Lines of Test Code**: 2,400+
+- **Test Files**: 3
+- **Coverage Target**: 80%+
+- **Estimated Execution Time**: < 15 seconds
+
+## Maintenance
+
+Tests should be updated when:
+- New features are added
+- Existing features are modified
+- Bugs are fixed (add regression tests)
+- Accessibility requirements change
+- Browser APIs are updated
+- Dependencies are upgraded
+
+---
+
+For more information about the project, see the main [README.md](../README.md).
