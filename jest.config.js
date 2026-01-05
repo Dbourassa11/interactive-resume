@@ -1,11 +1,11 @@
 module.exports = {
   testEnvironment: 'jsdom',
   setupFilesAfterEnv: ['<rootDir>/tests/setup.js'],
-  testMatch: ['**/__tests__/**/*.js', '**/?(*.)+(spec|test).js'],
+  testMatch: ['**/tests/**/*.test.js'],
   collectCoverageFrom: [
     'script.js',
-    '!node_modules/**',
-    '!tests/**'
+    '!**/node_modules/**',
+    '!**/tests/**'
   ],
   coverageThreshold: {
     global: {
@@ -15,5 +15,6 @@ module.exports = {
       statements: 80
     }
   },
+  moduleFileExtensions: ['js', 'json'],
   verbose: true
 };

@@ -73,6 +73,87 @@ To view the website locally:
 - Font Awesome Icons
 - System fonts (for performance)
 
+
+## Testing
+
+This project includes a comprehensive test suite with **250+ test cases** covering all functionality.
+
+### Test Coverage
+
+- ✅ **JavaScript Tests** (95+ tests): All interactive features, form validation, animations, scroll effects
+- ✅ **HTML Validation** (95+ tests): Structure, semantics, accessibility, SEO optimization
+- ✅ **CSS Validation** (90+ tests): Styling, responsive design, animations, best practices
+
+### Running Tests
+
+Install dependencies:
+```bash
+npm install
+```
+
+Run all tests:
+```bash
+npm test
+```
+
+Run with coverage report:
+```bash
+npm run test:coverage
+```
+
+Watch mode (auto-rerun on changes):
+```bash
+npm run test:watch
+```
+
+Run specific test suites:
+```bash
+npm run test:script  # JavaScript functionality
+npm run test:html    # HTML structure
+npm run test:css     # CSS styling
+```
+
+### Test Coverage Goals
+
+- Functions: 80%+
+- Lines: 80%+
+- Branches: 80%+
+- Statements: 80%+
+
+### What's Tested
+
+#### JavaScript Functionality
+- Mobile navigation (hamburger menu)
+- Smooth scrolling
+- Scroll effects (navbar, parallax, active states)
+- Animated counters
+- Intersection Observer animations
+- Form validation (email format, required fields)
+- Notification system
+- Lazy loading images
+- Error handling and edge cases
+
+#### HTML Structure
+- Valid HTML5 structure
+- SEO meta tags
+- Accessibility features (ARIA labels, semantic HTML)
+- All sections (hero, about, skills, experience, education, projects, contact)
+- Form structure and validation
+- Social media integration
+- No duplicate IDs or common errors
+
+#### CSS Styling
+- CSS variables and theming
+- Responsive design (mobile, tablet, desktop)
+- Animations and transitions
+- Layout (Flexbox, CSS Grid)
+- Form styling and focus states
+- Typography and color consistency
+- Performance optimizations
+- Cross-browser compatibility
+
+For detailed testing documentation, see [tests/README.md](tests/README.md).
+
 ## Browser Support
 
 - Chrome (latest)
