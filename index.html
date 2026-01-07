@@ -177,7 +177,12 @@
             </div>
 
             <!-- Contact Form with Formspree Integration -->
-            <form action="https://formspree.io/f/YOUR_FORM_ID" method="POST" class="contact-form">
+            <form action="https://formspree.io/f/YOUR_FORM_ID" method="POST" class="contact-form" id="contact-form">
+                <!-- Formspree Hidden Fields -->
+                <input type="hidden" name="_subject" value="New contact form submission from interactive-resume">
+                <input type="hidden" name="_captcha" value="false">
+                <input type="hidden" name="_next" value="https://dbourassa11.github.io/interactive-resume/#contact">
+
                 <div class="form-group">
                     <label for="name">Name</label>
                     <input type="text" id="name" name="name" required aria-required="true">
@@ -194,6 +199,10 @@
                 </div>
 
                 <button type="submit">Send Message</button>
+                
+                <noscript>
+                    <p style="margin-top: 1rem; padding: 0.75rem; background-color: #fff3cd; border: 1px solid #ffc107; border-radius: 4px; color: #856404; font-size: 0.9rem;">Note: JavaScript is required for enhanced form validation. The form will still work without it.</p>
+                </noscript>
             </form>
         </section>
     </main>

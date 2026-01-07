@@ -24,7 +24,7 @@ To enable the contact form:
    <form action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
    ```
 
-### Deployment
+## Deployment
 
 This resume can be deployed to:
 - GitHub Pages
@@ -32,12 +32,20 @@ This resume can be deployed to:
 - Vercel
 - Any static hosting service
 
-#### GitHub Pages Deployment
+### GitHub Pages Deployment
+
+**Current Status**: This site is configured for GitHub Pages deployment via GitHub Actions.
+
+**Live Site**: https://dbourassa11.github.io/interactive-resume/ (once Pages is enabled)
+
+**Setup Instructions**:
 
 1. Push the code to your GitHub repository
 2. Go to repository Settings > Pages
 3. Select the branch to deploy (e.g., `main` or `feature/complete-resume`)
 4. Save and wait for deployment
+
+**Troubleshooting**: If the deployment workflow fails, see detailed troubleshooting steps in [PAGES_SETUP.md](PAGES_SETUP.md) or check the [Actions logs](https://github.com/Dbourassa11/interactive-resume/actions).
 
 ## Files
 
